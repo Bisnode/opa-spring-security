@@ -1,5 +1,22 @@
-/.idea/
+# IDE
+.idea
+*.iml
 
-/gradle/wrapper/gradle-wrapper.jar
-build
+# Maven
+target
+
+# gradle config
 .gradle
+/gradle/wrapper/gradle-wrapper.jar
+
+# project binaries
+build
+out
+classes
+
+# mac os x
+.DS_Store
+
+/libs/
+
+lombok.config
