@@ -1,0 +1,10 @@
+allprojects {
+    tasks.register("hello") {
+        doLast {
+            println("I'm ${this.project.name}")
+        }
+    }
+}
+subprojects {
+    version='0.0.1-SNAPSHOT'
+}
