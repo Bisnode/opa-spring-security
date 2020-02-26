@@ -1,0 +1,6 @@
+opa:
+  filter:
+    auto-config:
+      enabled: true
+    policy: test-policy
+    instance:  test-instance

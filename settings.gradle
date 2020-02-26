@@ -1,2 +1,2 @@
 rootProject.name = 'opa-spring-security'
-include 'opa-core' ,'opa-autoconfigure','opa-spring-boot-starter'
+include 'opa-filter-core' ,'opa-filter-autoconfigure','opa-filter-spring-boot-starter'

@@ -1,7 +1,0 @@
-plugins {
-    id 'groovy'
-    id 'java'
-}
-dependencies {
-    compile project(':opa-autoconfigure')
-}

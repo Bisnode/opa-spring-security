@@ -1,0 +1,19 @@
+plugins {
+    id 'groovy'
+    id 'java'
+}
+
+dependencies {
+    compile project(':opa-filter-core')
+    implementation("org.springframework.security.oauth:spring-security-oauth2:$springAuth2Version")
+    implementation("javax.servlet:javax.servlet-api:$javaxServletApiVersion")
+    implementation("org.springframework.boot:spring-boot-autoconfigure:$springAutoConfigureVersion")
+    testImplementation("org.codehaus.groovy:groovy-all:$groovyAllVersion")
+
+    testImplementation("org.spockframework:spock-core:$spockBOMVersion")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
+
+}
+tasks.test {
+    useJUnitPlatform()
+}
