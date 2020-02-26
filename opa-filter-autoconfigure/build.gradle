@@ -1,19 +1,21 @@
 plugins {
     id 'groovy'
     id 'java'
-}
 
+}
+repositories {
+    mavenCentral()
+}
 dependencies {
     compile project(':opa-filter-core')
+    implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.security.oauth:spring-security-oauth2:$springAuth2Version")
     implementation("javax.servlet:javax.servlet-api:$javaxServletApiVersion")
     implementation("org.springframework.boot:spring-boot-autoconfigure:$springAutoConfigureVersion")
-    testImplementation("org.codehaus.groovy:groovy-all:$groovyAllVersion")
-
-    testImplementation("org.spockframework:spock-core:$spockBOMVersion")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:$springConfigurationProcessorVersion")
+    testImplementation('org.spockframework:spock-spring:1.3-groovy-2.5')
+    testImplementation('org.spockframework:spock-core:1.3-groovy-2.5')
+    testImplementation('org.codehaus.groovy:groovy-all:2.5.6')
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
 
-}
-tasks.test {
-    useJUnitPlatform()
 }

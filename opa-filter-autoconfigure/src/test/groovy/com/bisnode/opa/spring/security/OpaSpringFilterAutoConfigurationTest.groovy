@@ -1,34 +1,58 @@
 package com.bisnode.opa.spring.security
 
-
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.autoconfigure.AutoConfigurations
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.runner.ApplicationContextRunner
-import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
-@SpringBootTest
-@EnableAutoConfiguration
-@ActiveProfiles("test")
+@SpringBootTest(
+        classes = [SampleApplication],
+        webEnvironment = SpringBootTest.WebEnvironment.MOCK
+)
 class OpaSpringFilterAutoConfigurationTest extends Specification {
+    ApplicationContextRunner contextRunner
 
-    private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(OpaSpringFilterAutoConfiguration.class));
+    def setup(){
+        contextRunner = new ApplicationContextRunner()
+                .withConfiguration(AutoConfigurations.of(OpaSpringFilterAutoConfiguration.class))
+    }
+    def 'should start'(){
+        expect:
+          contextRunner
+    }
 
-//    @Autowired
-//    private OpaSpringFilterAutoConfiguration opaSpringFilterAutoConfiguration
-//    @Autowired
-//    private OpaFilterConfiguration opaFilterConfiguration
-//
-//    def 'Should create config with injected mock'() {
-//        given:
-//        when:
-//         true
-//        then:
-//          opaFilterConfiguration.getInstance()=="test-instance"
-//          opaSpringFilterAutoConfiguration.getOpaFilterConfiguration().getInstance() == "test-policy"
-//          opaSpringFilterAutoConfiguration.getOpaFilterConfiguration().getInstance() == "test-instance"
-//
-//
-//    }
+    def 'Should create config from application-test.yml'() {
+        OpaFilterConfiguration testConfig;
+        given:
+
+        when:
+          testConfig = new OpaFilterConfiguration(true,"test-policy","test-instance")
+        then:
+          contextRunner.withSystemProperties("spring.profiles.active=test")
+                  .run({ context ->
+                      OpaFilterConfiguration filterConfiguration = context.getBean(OpaFilterConfiguration.class)
+                      filterConfiguration.isEnabled() == testConfig.isEnabled()
+                      filterConfiguration.getInstance() == testConfig.getInstance()
+                      filterConfiguration.getPolicy() == testConfig.getPolicy()
+                  })
+
+    }
+    def 'Should autoconfigure when no config is provided'(){
+        OpaFilterConfiguration testConfig;
+        given:
+
+        when:
+          testConfig = new OpaFilterConfiguration(true,null,null)
+        then:
+          contextRunner.withSystemProperties("spring.profiles.active=something")
+                  .run({ context ->
+                      OpaFilterConfiguration filterConfiguration = context.getBean(OpaFilterConfiguration.class)
+                      filterConfiguration.isEnabled() == testConfig.isEnabled()
+                      filterConfiguration.getInstance() == testConfig.getInstance()
+                      filterConfiguration.getPolicy() == testConfig.getPolicy()
+                  })
+
+
+    }
+
 }

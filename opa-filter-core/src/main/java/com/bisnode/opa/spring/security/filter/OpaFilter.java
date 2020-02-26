@@ -143,7 +143,7 @@ public class OpaFilter extends GenericFilterBean {
         }
     }
 
-    private static class Decision {
+    public static class Decision {
         private Boolean allow;
         private String reason;
 

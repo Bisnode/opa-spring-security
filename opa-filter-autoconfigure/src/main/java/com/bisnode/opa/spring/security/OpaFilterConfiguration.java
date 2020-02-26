@@ -1,19 +1,24 @@
 package com.bisnode.opa.spring.security;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Objects;
 
 @Configuration
+@ConfigurationProperties(prefix = "opa.filter")
+@ConditionalOnProperty(prefix = "opa.filter", name = "enabled", matchIfMissing = true)
 public class OpaFilterConfiguration {
     private boolean enabled;
     private String policy;
     private String instance;
 
-    public OpaFilterConfiguration(@Value("opa.filter.auto-config.enabled") boolean enabled,
-                                  @Value("opa.filter.policy") String policy,
-                                  @Value("opa.filter.instance") String instance) {
+    public OpaFilterConfiguration() {
+
+    }
+
+    public OpaFilterConfiguration(boolean enabled, String policy, String instance) {
         this.enabled = enabled;
         this.policy = policy;
         this.instance = instance;

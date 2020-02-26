@@ -1,0 +1,5 @@
+opa:
+  filter:
+    enabled: true
+    instance: test-instance
+    policy: test-policy
