@@ -7,7 +7,6 @@ target
 
 # gradle config
 .gradle
-/gradle/wrapper/gradle-wrapper.jar
 
 # project binaries
 build

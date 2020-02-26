@@ -1,6 +1,8 @@
 package com.bisnode.opa.spring.security
 
+import com.bisnode.opa.spring.security.filter.Jwt
 import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.context.SecurityContextImpl
 import org.springframework.security.oauth2.provider.OAuth2Authentication
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails
@@ -27,7 +29,7 @@ class JwtSpec extends Specification{
           SecurityContextHolder.setContext(contextWithMockOAuth2)
 
         when:
-          Optional<JwtSpec> jwt = JwtSpec.fromSecurityContext()
+          Optional<Jwt> jwt = Jwt.fromSecurityContext()
 
         then:
           jwt.isPresent()
@@ -38,7 +40,7 @@ class JwtSpec extends Specification{
           SecurityContextHolder.setContext(new SecurityContextImpl(null))
 
         when:
-          Optional<JwtSpec> jwt = JwtSpec.fromSecurityContext()
+          Optional<Jwt> jwt = Jwt.fromSecurityContext()
 
         then:
           jwt.isEmpty()

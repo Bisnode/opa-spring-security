@@ -1,6 +1,6 @@
 package com.bisnode.opa.spring.security.filter;
 
-import static org.junit.platform.commons.util.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import org.slf4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

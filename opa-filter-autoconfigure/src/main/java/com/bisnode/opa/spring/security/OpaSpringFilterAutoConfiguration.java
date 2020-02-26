@@ -13,9 +13,8 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 
 @Configuration
 @Import(OpaFilterConfiguration.class)
-@ConditionalOnProperty(prefix = "opa.filter.auto-config", name = "enabled", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "opa.filter", name = "enabled", matchIfMissing = true)
 public class OpaSpringFilterAutoConfiguration extends OpaFilterConfigurer {
-
 
     private OpaFilterConfiguration opaFilterConfiguration;
 
