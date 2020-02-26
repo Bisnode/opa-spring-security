@@ -1,0 +1,39 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'java'
+    id 'groovy'
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+version = "0.0.1-SNAPSHOT"
+group = "com.bisnode.opa"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+    api("com.bisnode.opa:opa-java-client:$opaJavClientVersion")
+    implementation("javax.servlet:javax.servlet-api:$javaxServletApiVersion")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.10.2")
+    implementation("org.slf4j:slf4j-api:1.7.30")
+    implementation("org.springframework.security:spring-security-core:$springVersion")
+    implementation("org.springframework.security:spring-security-config:$springVersion")
+    implementation("org.springframework.security:spring-security-web:$springVersion")
+    implementation("org.springframework.security.oauth:spring-security-oauth2:$springAuth2Version")
+    implementation("org.codehaus.groovy:groovy-all:$groovyAllVersion")
+    testImplementation("org.spockframework:spock-core:$spockBOMVersion")
+}
+
+jar {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': project.version)
+    }
+}

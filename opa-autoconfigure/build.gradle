@@ -1,9 +1,0 @@
-plugins {
-    id 'groovy'
-    id 'java'
-}
-dependencies {
-    compile project(':opa-core')
-    implementation("org.springframework.security.oauth:spring-security-oauth2:$springAuth2")
-
-}
