@@ -1,20 +1,19 @@
-package com.bisnode.opa.spring.security;
+package com.bisnode.opa.spring.security.filter;
 
 import com.bisnode.opa.client.OpaClient;
 import com.bisnode.opa.client.query.OpaQueryApi;
-import com.bisnode.opa.spring.security.filter.OpaFilter;
-import com.bisnode.opa.spring.security.filter.OpaFilterConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 
 @Configuration
 @Import(OpaFilterConfiguration.class)
 @ConditionalOnProperty(prefix = "opa.filter", name = "enabled", matchIfMissing = true)
-public class OpaSpringFilterAutoConfiguration extends OpaFilterConfigurer {
+class OpaSpringFilterAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     private OpaFilterConfiguration opaFilterConfiguration;
 
@@ -25,7 +24,7 @@ public class OpaSpringFilterAutoConfiguration extends OpaFilterConfigurer {
 
     @Override
     public void configure(HttpSecurity http) {
-        http.addFilterAfter(newOpaFilter(), AbstractPreAuthenticatedProcessingFilter.class);
+        http.addFilterAfter(newOpaFilter(), BearerTokenAuthenticationFilter.class);
     }
 
 

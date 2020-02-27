@@ -1,4 +1,4 @@
-package com.bisnode.opa.spring.security;
+package com.bisnode.opa.spring.security.filter;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;

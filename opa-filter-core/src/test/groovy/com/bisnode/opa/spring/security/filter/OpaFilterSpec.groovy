@@ -1,9 +1,8 @@
-package com.bisnode.opa.spring.security
+package com.bisnode.opa.spring.security.filter
 
 
 import com.bisnode.opa.client.query.OpaQueryApi
 import com.bisnode.opa.client.query.QueryForDocumentRequest
-import com.bisnode.opa.spring.security.filter.OpaFilter
 import org.springframework.security.access.AccessDeniedException
 import spock.lang.Specification
 import spock.lang.Subject
@@ -22,7 +21,7 @@ class OpaFilterSpec extends Specification {
         given:
           FilterChain filterChain = Mock()
           HttpServletRequest httpServletRequest = Mock()
-          opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, OpaFilter.Decision) >> decisionWithAllow(false)
+          opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, Decision) >> decisionWithAllow(false)
 
         when:
           opaFilter.doFilter(httpServletRequest, null, filterChain)
@@ -35,7 +34,7 @@ class OpaFilterSpec extends Specification {
         given:
           FilterChain filterChain = Mock()
           HttpServletRequest httpServletRequest = Mock()
-          opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, OpaFilter.Decision) >> decisionWithAllow(null)
+          opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, Decision) >> decisionWithAllow(null)
 
         when:
           opaFilter.doFilter(httpServletRequest, null, Mock(FilterChain))
@@ -49,7 +48,7 @@ class OpaFilterSpec extends Specification {
         given:
           FilterChain filterChain = Mock()
           HttpServletRequest httpServletRequest = Mock()
-          opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, OpaFilter.Decision) >> decisionWithAllow(true)
+          opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, Decision) >> decisionWithAllow(true)
 
         when:
           opaFilter.doFilter(httpServletRequest, null, filterChain)
@@ -58,8 +57,8 @@ class OpaFilterSpec extends Specification {
           1 * filterChain.doFilter(httpServletRequest, _)
     }
 
-    static OpaFilter.Decision decisionWithAllow(Boolean allow) {
-        OpaFilter.Decision decision = new OpaFilter.Decision()
+    static Decision decisionWithAllow(Boolean allow) {
+        Decision decision = new Decision()
         decision.allow = allow
         return decision
     }
