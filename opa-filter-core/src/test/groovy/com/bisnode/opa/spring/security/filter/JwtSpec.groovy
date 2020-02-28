@@ -1,11 +1,10 @@
-package com.bisnode.opa.spring.security
+package com.bisnode.opa.spring.security.filter
 
-import com.bisnode.opa.spring.security.filter.Jwt
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.context.SecurityContextImpl
-import org.springframework.security.oauth2.provider.OAuth2Authentication
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails
+import org.springframework.security.oauth2.core.AbstractOAuth2Token
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -15,11 +14,11 @@ class JwtSpec extends Specification{
     SecurityContext contextWithMockOAuth2
 
     def setupSpec() {
-        OAuth2AuthenticationDetails authenticationDetails = Mock()
-        authenticationDetails.getTokenValue() >> 'some.token.withCrypto'
-
-        OAuth2Authentication authentication = Mock()
-        authentication.getDetails() >> authenticationDetails
+        Authentication authentication = Stub() {
+            getCredentials() >> Stub(AbstractOAuth2Token) {
+                getTokenValue() >> 'some.token.withCrypto'
+            }
+        }
 
         contextWithMockOAuth2 = new SecurityContextImpl(authentication)
     }

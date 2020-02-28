@@ -1,45 +1,38 @@
 package com.bisnode.opa.spring.security.filter;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.oauth2.core.AbstractOAuth2Token;
 
 import java.util.Optional;
 
-public class Jwt {
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(Jwt.class);
+import static java.util.function.Predicate.not;
+
+class Jwt {
+    private static final Logger log = LoggerFactory.getLogger(Jwt.class);
     private final String encoded;
 
-    private Jwt(String encoded) {
-        this.encoded = encoded;
+    private Jwt(String encodedToken) {
+        this.encoded = encodedToken;
     }
 
-    public static Optional<Jwt> fromSecurityContext() {
+    static Optional<Jwt> fromSecurityContext() {
         return extractAccessToken(SecurityContextHolder.getContext().getAuthentication())
+                .filter(not(String::isBlank))
                 .filter(Jwt::looksLikeJwt)
                 .map(Jwt::new);
     }
 
     private static Optional<String> extractAccessToken(final Authentication authentication) {
-        if (!(authentication instanceof OAuth2Authentication)) {
-            log.debug("Authentication not an instance of OAuth2Authentication.");
+        if (!(authentication.getCredentials() instanceof AbstractOAuth2Token)) {
+            log.warn("Authentication credentials not an instance of AbstractOAuth2Token.");
             return Optional.empty();
         }
 
-        if (!(authentication.getDetails() instanceof OAuth2AuthenticationDetails)) {
-            log.debug("AuthenticationDetails not an instance of OAuth2AuthenticationDetails.");
-            return Optional.empty();
-        }
-
-        final String accessToken = ((OAuth2AuthenticationDetails) authentication.getDetails()).getTokenValue();
-        if (isBlank(accessToken)) {
-            log.debug("No valid access token found in context (null or empty).");
-            return Optional.empty();
-        }
-        return Optional.of(accessToken);
+        final String accessToken = ((AbstractOAuth2Token) authentication.getCredentials()).getTokenValue();
+        return Optional.ofNullable(accessToken);
     }
 
     /**
