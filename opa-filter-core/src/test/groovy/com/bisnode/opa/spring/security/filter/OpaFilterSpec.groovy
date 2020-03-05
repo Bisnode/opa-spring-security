@@ -19,42 +19,41 @@ class OpaFilterSpec extends Specification {
 
     def 'should throw AccessDeniedException on disallow'() {
         given:
-          FilterChain filterChain = Mock()
-          HttpServletRequest httpServletRequest = Mock()
-          opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, Decision) >> decisionWithAllow(false)
+            FilterChain filterChain = Mock()
+            HttpServletRequest httpServletRequest = Mock()
+            opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, Decision) >> decisionWithAllow(false)
 
         when:
-          opaFilter.doFilter(httpServletRequest, null, filterChain)
+            opaFilter.doFilter(httpServletRequest, null, filterChain)
 
         then:
-          thrown AccessDeniedException
+            thrown AccessDeniedException
     }
 
     def 'should throw AccessDeniedException on undefined response'() {
         given:
-          FilterChain filterChain = Mock()
-          HttpServletRequest httpServletRequest = Mock()
-          opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, Decision) >> decisionWithAllow(null)
+            HttpServletRequest httpServletRequest = Mock()
+            opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, Decision) >> decisionWithAllow(null)
 
         when:
-          opaFilter.doFilter(httpServletRequest, null, Mock(FilterChain))
+            opaFilter.doFilter(httpServletRequest, null, Mock(FilterChain))
 
         then:
-          thrown AccessDeniedException
+            thrown AccessDeniedException
     }
 
 
     def 'should continue filtering on allow'() {
         given:
-          FilterChain filterChain = Mock()
-          HttpServletRequest httpServletRequest = Mock()
-          opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, Decision) >> decisionWithAllow(true)
+            FilterChain filterChain = Mock()
+            HttpServletRequest httpServletRequest = Mock()
+            opaQueryApi.queryForDocument(_ as QueryForDocumentRequest, Decision) >> decisionWithAllow(true)
 
         when:
-          opaFilter.doFilter(httpServletRequest, null, filterChain)
+            opaFilter.doFilter(httpServletRequest, null, filterChain)
 
         then:
-          1 * filterChain.doFilter(httpServletRequest, _)
+            1 * filterChain.doFilter(httpServletRequest, _)
     }
 
     static Decision decisionWithAllow(Boolean allow) {

@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.core.AbstractOAuth2Token
 import spock.lang.Shared
 import spock.lang.Specification
 
-class JwtSpec extends Specification{
+class JwtSpec extends Specification {
 
     @Shared
     SecurityContext contextWithMockOAuth2
@@ -25,24 +25,24 @@ class JwtSpec extends Specification{
 
     def 'should get token on oAuth2 authentication'() {
         given:
-          SecurityContextHolder.setContext(contextWithMockOAuth2)
+            SecurityContextHolder.setContext(contextWithMockOAuth2)
 
         when:
-          Optional<Jwt> jwt = Jwt.fromSecurityContext()
+            Optional<Jwt> jwt = Jwt.fromSecurityContext()
 
         then:
-          jwt.isPresent()
+            jwt.isPresent()
     }
 
     def 'should return empty on no authentication'() {
         given:
-          SecurityContextHolder.setContext(new SecurityContextImpl(null))
+            SecurityContextHolder.setContext(new SecurityContextImpl(null))
 
         when:
-          Optional<Jwt> jwt = Jwt.fromSecurityContext()
+            Optional<Jwt> jwt = Jwt.fromSecurityContext()
 
         then:
-          jwt.isEmpty()
+            jwt.isEmpty()
 
     }
 }

@@ -61,7 +61,6 @@ public class OpaFilter extends GenericFilterBean {
         String rejectionMessage = String.format("Access request rejected by OPA because: %s", decision.getReason());
         log.info(rejectionMessage);
         throw new AccessDeniedException(rejectionMessage);
-
     }
 
     private void logAndDeny(HttpServletRequest httpRequest, OpaClientException opaException) {

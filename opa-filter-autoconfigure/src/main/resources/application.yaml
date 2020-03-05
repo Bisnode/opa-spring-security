@@ -1,5 +1,0 @@
-opa:
-  filter:
-    enabled: true
-    instance: default-instance
-    policy: default-policy

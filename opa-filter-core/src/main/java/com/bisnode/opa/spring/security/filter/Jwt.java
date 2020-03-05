@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.core.AbstractOAuth2Token;
 
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
 import static java.util.function.Predicate.not;
 
 class Jwt {
@@ -26,6 +27,11 @@ class Jwt {
     }
 
     private static Optional<String> extractAccessToken(final Authentication authentication) {
+        if (isNull(authentication)) {
+            log.warn("Received null authentication");
+            return Optional.empty();
+        }
+
         if (!(authentication.getCredentials() instanceof AbstractOAuth2Token)) {
             log.warn("Authentication credentials not an instance of AbstractOAuth2Token.");
             return Optional.empty();
