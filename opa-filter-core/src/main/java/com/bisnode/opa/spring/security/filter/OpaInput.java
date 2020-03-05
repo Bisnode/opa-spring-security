@@ -23,15 +23,15 @@ class OpaInput {
             return new Builder();
         }
 
-        String getPath() {
+        public String getPath() {
             return this.path;
         }
 
-        String getMethod() {
+        public String getMethod() {
             return this.method;
         }
 
-        String getEncodedJwt() {
+        public String getEncodedJwt() {
             return this.encodedJwt;
         }
 

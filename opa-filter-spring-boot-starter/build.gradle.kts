@@ -1,10 +1,4 @@
-plugins {
-    java
-    `java-library`
-    groovy
-}
-
 dependencies {
-    implementation(project(":opa-filter-autoconfigure"))
-    implementation(project(":opa-filter-core"))
+    implementation(project(Project.core))
+    implementation(project(Project.autoconfigure))
 }
