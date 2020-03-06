@@ -55,7 +55,7 @@ class OpaFilterConfigurerSpec extends Specification {
                     )
             )
         when:
-            restClient.get(path: '/', headers: [ContentType.HEADER_NAME: APPLICATION_JSON])
+            restClient.get(path: '/', headers: ['Content-Type': APPLICATION_JSON])
 
         then:
             HttpResponseException e = thrown(HttpResponseException)
@@ -72,7 +72,7 @@ class OpaFilterConfigurerSpec extends Specification {
                     )
             )
         when:
-            def response = restClient.get(path: '/', headers: [ContentType.HEADER_NAME: APPLICATION_JSON])
+            def response = restClient.get(path: '/', headers: ['Content-Type': APPLICATION_JSON])
 
 
         then:
