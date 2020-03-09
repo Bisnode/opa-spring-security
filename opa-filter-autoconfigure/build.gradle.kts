@@ -1,3 +1,8 @@
+plugins {
+    id("org.springframework.boot").version("2.2.5.RELEASE")
+    id("io.spring.dependency-management").version("1.0.9.RELEASE")
+}
+
 dependencies {
     implementation(project(Project.core))
 
@@ -8,6 +13,7 @@ dependencies {
 
     annotationProcessor(SpringBoot.annotationProcessor)
 
+    testImplementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation(Testing.springBoot)
     testImplementation(Testing.wiremock)
     testImplementation(Testing.httpClient)

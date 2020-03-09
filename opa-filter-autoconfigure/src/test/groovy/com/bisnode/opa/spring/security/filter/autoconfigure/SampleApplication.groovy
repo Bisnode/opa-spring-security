@@ -1,5 +1,6 @@
 package com.bisnode.opa.spring.security.filter.autoconfigure
 
+
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,5 +16,4 @@ class SampleApplication {
     @GetMapping
     void controllerMethod() {
     }
-
 }
