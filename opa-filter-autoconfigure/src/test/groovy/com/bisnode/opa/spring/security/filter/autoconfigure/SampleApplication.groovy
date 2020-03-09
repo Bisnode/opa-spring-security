@@ -15,5 +15,4 @@ class SampleApplication {
     @GetMapping
     void controllerMethod() {
     }
-
 }

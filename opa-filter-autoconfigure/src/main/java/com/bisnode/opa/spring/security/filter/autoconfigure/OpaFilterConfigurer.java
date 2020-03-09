@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 @Configuration
 class OpaFilterConfigurer extends WebSecurityConfigurerAdapter {
@@ -22,7 +22,7 @@ class OpaFilterConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) {
         OpaFilter opaFilter = new OpaFilter(newOpaClient(), opaFilterConfiguration.getPolicy());
-        http.addFilterAfter(opaFilter, BearerTokenAuthenticationFilter.class);
+        http.addFilterAfter(opaFilter, FilterSecurityInterceptor.class);
     }
 
     private OpaQueryApi newOpaClient() {
