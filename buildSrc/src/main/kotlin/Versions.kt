@@ -11,5 +11,5 @@ object Versions {
     const val byteBuddy = "1.9.3"
     const val objenesis = "2.6"
     const val wiremock = "2.26.0"
-    const val httpClient = "0.7.2"
+    const val httpClient = "0.7.1"
 }
