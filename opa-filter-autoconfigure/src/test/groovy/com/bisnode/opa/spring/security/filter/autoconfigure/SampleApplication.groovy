@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RestController
 @SpringBootApplication
 @RestController
 class SampleApplication {
+
     static void main(String[] args) {
         SpringApplication.run(SampleApplication, args);
     }
 
     @GetMapping
-    void controllerMethod() {
-    }
+    void controllerMethod() { }
 
 }

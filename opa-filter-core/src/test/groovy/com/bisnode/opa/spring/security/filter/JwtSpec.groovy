@@ -43,6 +43,6 @@ class JwtSpec extends Specification {
 
         then:
             jwt.isEmpty()
-
     }
+
 }

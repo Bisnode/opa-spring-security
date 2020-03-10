@@ -10,10 +10,10 @@ class OpaFilterConfiguration {
     private String policy;
     private String instance;
 
-    public OpaFilterConfiguration() {
+    OpaFilterConfiguration() {
     }
 
-    public OpaFilterConfiguration(boolean enabled, String policy, String instance) {
+    OpaFilterConfiguration(boolean enabled, String policy, String instance) {
         this.enabled = enabled;
         this.policy = policy;
         this.instance = instance;

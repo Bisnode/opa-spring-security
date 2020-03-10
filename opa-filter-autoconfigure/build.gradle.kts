@@ -8,6 +8,7 @@ dependencies {
 
     annotationProcessor(SpringBoot.annotationProcessor)
 
+    testImplementation(Testing.springBootStarterWeb)
     testImplementation(Testing.springBoot)
     testImplementation(Testing.wiremock)
     testImplementation(Testing.httpClient)

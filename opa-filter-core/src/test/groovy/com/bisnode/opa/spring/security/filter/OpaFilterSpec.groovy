@@ -1,6 +1,5 @@
 package com.bisnode.opa.spring.security.filter
 
-
 import com.bisnode.opa.client.query.OpaQueryApi
 import com.bisnode.opa.client.query.QueryForDocumentRequest
 import org.springframework.security.access.AccessDeniedException
@@ -41,7 +40,6 @@ class OpaFilterSpec extends Specification {
         then:
             thrown AccessDeniedException
     }
-
 
     def 'should continue filtering on allow'() {
         given:

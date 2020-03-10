@@ -30,4 +30,5 @@ class OpaSpringFilterAutoConfigurationOffSpec extends Specification implements B
         where:
             beanClass << [OpaSpringFilterAutoConfiguration, OpaFilterConfigurer, OpaFilterConfiguration]
     }
+
 }

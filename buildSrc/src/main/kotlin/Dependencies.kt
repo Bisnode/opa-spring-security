@@ -19,6 +19,7 @@ object Opa {
 
 object Testing {
     const val springBoot = "org.springframework.boot:spring-boot-starter-test:${Versions.springBoot}"
+    const val springBootStarterWeb = "org.springframework.boot:spring-boot-starter-web:${Versions.springBoot}"
     const val wiremock = "com.github.tomakehurst:wiremock-jre8:${Versions.wiremock}"
     const val httpClient = "org.codehaus.groovy.modules.http-builder:http-builder:${Versions.httpClient}"
 }

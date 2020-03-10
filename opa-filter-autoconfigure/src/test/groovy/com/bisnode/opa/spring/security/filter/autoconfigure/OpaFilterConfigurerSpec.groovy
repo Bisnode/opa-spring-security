@@ -23,6 +23,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         webEnvironment = RANDOM_PORT
 )
 class OpaFilterConfigurerSpec extends Specification {
+
     static final int OPA_PORT = 8181
 
     @LocalServerPort
@@ -42,7 +43,7 @@ class OpaFilterConfigurerSpec extends Specification {
     }
 
     def setup() {
-        restClient = new RESTClient("http://localhost:$applicationPort")
+        restClient = new RESTClient("http://localhost:$applicationPort", APPLICATION_JSON)
     }
 
     def 'should return 401 on opa deny'() {
@@ -55,7 +56,7 @@ class OpaFilterConfigurerSpec extends Specification {
                     )
             )
         when:
-            restClient.get(path: '/', headers: ['Content-Type': APPLICATION_JSON])
+            restClient.get(path: '/')
 
         then:
             HttpResponseException e = thrown(HttpResponseException)
@@ -72,8 +73,7 @@ class OpaFilterConfigurerSpec extends Specification {
                     )
             )
         when:
-            def response = restClient.get(path: '/', headers: ['Content-Type': APPLICATION_JSON])
-
+            def response = restClient.get(path: '/')
 
         then:
             noExceptionThrown()
@@ -82,11 +82,12 @@ class OpaFilterConfigurerSpec extends Specification {
 
     @TestConfiguration
     static class TestConfig {
+
         @Bean
         OpaFilterConfiguration opaFilterConfiguration() {
             new OpaFilterConfiguration(true, 'some/policy', "http://localhost:$OPA_PORT")
         }
-    }
 
+    }
 
 }
