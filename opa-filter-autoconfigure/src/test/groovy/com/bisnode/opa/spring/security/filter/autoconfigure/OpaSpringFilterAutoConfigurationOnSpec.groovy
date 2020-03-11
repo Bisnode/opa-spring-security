@@ -12,7 +12,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         classes = [SampleApplication],
         properties = [
                 "opa.filter.policy=some/policy",
-                "opa.filter.instance=http://someUrl:1234/"
+                "opa.filter.documentPath=http://someUrl:1234/"
         ],
         webEnvironment = MOCK
 )
@@ -40,7 +40,7 @@ class OpaSpringFilterAutoConfigurationOnSpec extends Specification implements Be
     def 'should read properties'() {
         expect:
             opaFilterConfiguration.instance == 'http://someUrl:1234/'
-            opaFilterConfiguration.policy == 'some/policy'
+            opaFilterConfiguration.documentPath == 'some/policy'
     }
 
 }

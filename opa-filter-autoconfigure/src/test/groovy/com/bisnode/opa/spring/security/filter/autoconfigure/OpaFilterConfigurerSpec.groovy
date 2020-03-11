@@ -46,7 +46,7 @@ class OpaFilterConfigurerSpec extends Specification {
         restClient = new RESTClient("http://localhost:$applicationPort", APPLICATION_JSON)
     }
 
-    def 'should return 401 on opa deny'() {
+    def 'should return 403 on opa deny'() {
         given:
             wireMockServer.stubFor(any(anyUrl())
                     .willReturn(aResponse()

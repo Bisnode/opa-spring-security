@@ -21,7 +21,7 @@ class OpaFilterConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) {
-        OpaFilter opaFilter = new OpaFilter(newOpaClient(), opaFilterConfiguration.getPolicy());
+        OpaFilter opaFilter = new OpaFilter(newOpaClient(), opaFilterConfiguration.getDocumentPath());
         http.addFilterAfter(opaFilter, FilterSecurityInterceptor.class);
     }
 

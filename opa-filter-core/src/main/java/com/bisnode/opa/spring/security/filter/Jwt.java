@@ -42,7 +42,7 @@ class Jwt {
     }
 
     /**
-     * 'Borrowed' from {@link org.springframework.security.jwt.JwtHelper#decode(String)}
+     * 'Borrowed' from former {@link org.springframework.security}.
      * The assumption is that proper Jwt consists of three base64 strings separated with '.'
      * Here, we also assume that Jwt is always signed (i.e. has not empty 'crypto' section)
      *

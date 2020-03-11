@@ -1,5 +1,8 @@
 package com.bisnode.opa.spring.security.filter;
 
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+
 import javax.servlet.http.HttpServletRequest;
 
 class OpaInput {
@@ -19,23 +22,27 @@ class OpaInput {
                 .path(httpRequest.getServletPath());
     }
 
+    @NonNull
     static Builder builder() {
         return new Builder();
     }
 
+    @Nullable
     public String getPath() {
         return this.path;
     }
 
+    @Nullable
     public String getMethod() {
         return this.method;
     }
 
+    @Nullable
     public String getEncodedJwt() {
         return this.encodedJwt;
     }
 
-    public static class Builder {
+    static class Builder {
         private String path;
         private String method;
         private String encodedJwt;
@@ -43,22 +50,22 @@ class OpaInput {
         Builder() {
         }
 
-        public Builder path(String path) {
+        Builder path(String path) {
             this.path = path;
             return this;
         }
 
-        public Builder method(String method) {
+        Builder method(String method) {
             this.method = method;
             return this;
         }
 
-        public Builder encodedJwt(String encodedJwt) {
+        Builder encodedJwt(String encodedJwt) {
             this.encodedJwt = encodedJwt;
             return this;
         }
 
-        public OpaInput build() {
+        OpaInput build() {
             return new OpaInput(path, method, encodedJwt);
         }
 

@@ -1,5 +1,7 @@
 package com.bisnode.opa.spring.security.filter;
 
+import org.springframework.lang.Nullable;
+
 import static java.lang.Boolean.TRUE;
 
 class Decision {
@@ -10,19 +12,21 @@ class Decision {
         return TRUE.equals(allow);
     }
 
-    public Boolean getAllow() {
+    @Nullable
+    Boolean getAllow() {
         return this.allow;
     }
 
-    public String getReason() {
+    @Nullable
+    String getReason() {
         return this.reason;
     }
 
-    public void setAllow(Boolean allow) {
+    void setAllow(@Nullable Boolean allow) {
         this.allow = allow;
     }
 
-    public void setReason(String reason) {
+    void setReason(@Nullable String reason) {
         this.reason = reason;
     }
 }

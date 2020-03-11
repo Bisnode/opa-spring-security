@@ -31,11 +31,11 @@ implementation 'com.bisnode.opa:opa-filter-spring-boot-starter:{version}'
 
 **All properties are prefixed with `opa.filter`**
 
-| Property   | Default value | Description                           | Example                    |
-|------------|---------------|---------------------------------------|----------------------------|
-| `enabled`  |    `true`     | Whether the filter should be enabled  | _false_                    |
-| `policy`   |               | Name of OPA policy to use for queries | _"http/request/authz"_     |
-| `instance` |               | Address of OPA instance               | _"http://localhost:8181/"_ |
+| Property       | Default value | Description                                  | Example                    |
+|----------------|---------------|----------------------------------------------|----------------------------|
+| `enabled`      |    `true`     | Whether the filter should be enabled         | _false_                    |
+| `documentPath` |               | Name of OPA document path to use for queries | _"http/request/authz"_     |
+| `instance`     |               | Address of OPA instance                      | _"http://localhost:8181/"_ |
 
 ## Policy requirements
 

@@ -21,17 +21,27 @@ public class OpaFilter extends GenericFilterBean {
     private final OpaQueryApi opaQueryApi;
     private final String policyName;
 
+    /**
+     * @param opaQueryApi
+     * @param policyName
+     */
     public OpaFilter(OpaQueryApi opaQueryApi, String policyName) {
         this.opaQueryApi = opaQueryApi;
         this.policyName = policyName;
     }
 
+    /**
+     * @param request
+     * @param response
+     * @param chain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (!(request instanceof HttpServletRequest)) {
-            throw new ServletException("OpaFilter supports only HTTP requests");
+        if (request instanceof HttpServletRequest) {
+            decideFor((HttpServletRequest) request);
         }
-        decideFor((HttpServletRequest) request);
         chain.doFilter(request, response);
     }
 

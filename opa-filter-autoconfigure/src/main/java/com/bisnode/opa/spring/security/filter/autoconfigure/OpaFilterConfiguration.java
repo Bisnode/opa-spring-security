@@ -7,28 +7,28 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "opa.filter")
 class OpaFilterConfiguration {
     private boolean enabled;
-    private String policy;
+    private String documentPath;
     private String instance;
 
     OpaFilterConfiguration() {
     }
 
-    OpaFilterConfiguration(boolean enabled, String policy, String instance) {
+    OpaFilterConfiguration(boolean enabled, String documentPath, String instance) {
         this.enabled = enabled;
-        this.policy = policy;
+        this.documentPath = documentPath;
         this.instance = instance;
     }
 
-    public String getPolicy() {
-        return this.policy;
+    public String getDocumentPath() {
+        return this.documentPath;
     }
 
     public String getInstance() {
         return this.instance;
     }
 
-    public void setPolicy(String policy) {
-        this.policy = policy;
+    public void setDocumentPath(String documentPath) {
+        this.documentPath = documentPath;
     }
 
     public void setInstance(String instance) {
