@@ -11,8 +11,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(
         classes = [SampleApplication],
         properties = [
-                "opa.filter.policy=some/policy",
-                "opa.filter.documentPath=http://someUrl:1234/"
+                "opa.filter.documentPath=some/policy",
+                "opa.filter.instance=http://someUrl:1234/"
         ],
         webEnvironment = MOCK
 )
