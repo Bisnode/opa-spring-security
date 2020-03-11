@@ -1,6 +1,6 @@
 # OPA Spring Security Library
 
-OPA Spring Security is a library that enables usage of OPA as authorization tool in Spring applications.
+OPA Spring Security is a library that enables using OPA for authorization in Spring applications.
 
 ## Installation
 

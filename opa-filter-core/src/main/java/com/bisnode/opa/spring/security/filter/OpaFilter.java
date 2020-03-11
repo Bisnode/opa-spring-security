@@ -38,7 +38,7 @@ public class OpaFilter extends GenericFilterBean {
     private void decideFor(HttpServletRequest httpRequest) {
         try {
             Decision decision = fetchDecision(httpRequest);
-            log.info("OPA response is 'allow': {} for access to {} {}", decision.getAllow(), httpRequest.getMethod(), httpRequest.getServletPath());
+            log.trace("OPA response is 'allow': {} for access to {} {}", decision.getAllow(), httpRequest.getMethod(), httpRequest.getServletPath());
             if (!decision.isAllow()) {
                 denyAccess(decision);
             }
@@ -59,13 +59,13 @@ public class OpaFilter extends GenericFilterBean {
 
     private void denyAccess(Decision decision) {
         String rejectionMessage = String.format("Access request rejected by OPA because: %s", decision.getReason());
-        log.info(rejectionMessage);
+        log.debug(rejectionMessage);
         throw new AccessDeniedException(rejectionMessage);
     }
 
     private void logAndDeny(HttpServletRequest httpRequest, OpaClientException opaException) {
         String errorMessage = String.format("OpaClientException caught when requesting access to %s %s", httpRequest.getMethod(), httpRequest.getServletPath());
-        log.error(errorMessage, opaException);
+        log.warn(errorMessage, opaException);
         throw new AccessDeniedException(errorMessage, opaException);
     }
 
