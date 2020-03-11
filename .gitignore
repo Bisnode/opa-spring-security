@@ -1,0 +1,21 @@
+# IDE
+.idea
+*.iml
+
+# Maven
+target
+
+# gradle config
+.gradle
+
+# project binaries
+build
+out
+classes
+
+# mac os x
+.DS_Store
+
+/libs/
+
+lombok.config

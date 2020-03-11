@@ -1,0 +1,33 @@
+<ruleset xmlns="http://codenarc.org/ruleset/1.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://codenarc.org/ruleset/1.0 http://codenarc.org/ruleset-schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://codenarc.org/ruleset-schema.xsd">
+
+    <description>Sample rule set</description>
+
+    <ruleset-ref path='rulesets/imports.xml'>
+        <rule-config name='DuplicateImport'>
+            <property name='priority' value='1'/>
+        </rule-config>
+        <exclude name='MisorderedStaticImports'/>
+    </ruleset-ref>
+
+    <ruleset-ref path='rulesets/formatting.xml'>
+        <rule-config name='SpaceAroundMapEntryColon'>
+            <property name='characterBeforeColonRegex' value='.'/>
+            <property name='characterAfterColonRegex' value='\s'/>
+        </rule-config>
+
+        <rule-config name='LineLength'>
+            <property name='length' value='160'/>
+        </rule-config>
+
+        <exclude name='ClassJavadoc'/>
+        <exclude name='Indentation'/>
+    </ruleset-ref>
+
+    <ruleset-ref path='rulesets/basic.xml'>
+        <exclude name='MisorderedStaticImports'/>
+        <exclude name='EmptyMethod' />
+    </ruleset-ref>
+</ruleset>
