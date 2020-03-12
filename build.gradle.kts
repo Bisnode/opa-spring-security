@@ -27,10 +27,6 @@ subprojects {
         reportFormat = "console"
     }
 
-    tasks.javadoc {
-        source = sourceSets["main"].allJava
-    }
-
 }
 
 tasks.wrapper {

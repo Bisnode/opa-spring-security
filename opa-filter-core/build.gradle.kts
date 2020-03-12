@@ -22,6 +22,10 @@ java {
     withJavadocJar()
 }
 
+tasks.javadoc {
+    source = sourceSets["main"].allJava
+}
+
 tasks.test {
     useJUnitPlatform()
 }
