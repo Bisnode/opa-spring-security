@@ -16,7 +16,7 @@ publishing {
             from(components["java"])
             pom {
                 name.set("OPA Spring Security filter Spring Boot Starter")
-                description.set("Spring Boot Starter for Opa Spring Security filter")
+                description.set("Spring Boot Starter for OPA Spring Security filter")
                 url.set("https://github.com/Bisnode/opa-spring-security")
                 licenses {
                     license {

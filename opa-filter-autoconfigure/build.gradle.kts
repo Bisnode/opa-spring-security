@@ -30,7 +30,7 @@ publishing {
             from(components["java"])
             pom {
                 name.set("OPA Spring Security filter autoconfiguration")
-                description.set("Autoconfiguration project for Opa Spring Security filter")
+                description.set("Autoconfiguration project for OPA Spring Security filter")
                 url.set("https://github.com/Bisnode/opa-spring-security")
                 licenses {
                     license {
