@@ -10,7 +10,7 @@ subprojects {
         plugin("java")
         plugin("java-library")
         plugin("groovy")
-        plugin("maven-publish")
+        plugin("signing")
     }
 
     repositories {
@@ -26,6 +26,11 @@ subprojects {
     configure<CodeNarcExtension> {
         reportFormat = "console"
     }
+
+    tasks.javadoc {
+        source = sourceSets["main"].allJava
+    }
+
 }
 
 tasks.wrapper {
