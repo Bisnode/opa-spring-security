@@ -1,5 +1,3 @@
-import java.util.Base64
-
 plugins {
     `maven-publish`
 }
@@ -16,10 +14,6 @@ dependencies {
     testImplementation(Spock.core)
     testRuntimeOnly(Spock.byteBuddy)
     testRuntimeOnly(Spock.objenesis)
-}
-
-java {
-    withJavadocJar()
 }
 
 tasks.javadoc {

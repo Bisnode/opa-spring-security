@@ -1,5 +1,3 @@
-import java.util.Base64
-
 plugins {
     `maven-publish`
 }
@@ -69,6 +67,10 @@ publishing {
             url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
         }
     }
+}
+
+tasks.javadoc {
+    isFailOnError = false
 }
 
 signing {
