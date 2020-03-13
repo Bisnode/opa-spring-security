@@ -79,11 +79,5 @@ publishing {
 }
 
 signing {
-    val signingKey: String? by project
-    val signingPassword: String? by project
-    val decodedKey = signingKey
-            ?.let { Base64.getDecoder().decode(signingKey) }
-            ?.let { String(it) }
-    useInMemoryPgpKeys(decodedKey, signingPassword)
     sign(publishing.publications["coreModule"])
 }
