@@ -1,5 +1,5 @@
 allprojects {
-    version = "0.0.1-SNAPSHOT"
+    version = "0.0.1"
     group = "com.bisnode.opa"
 }
 
