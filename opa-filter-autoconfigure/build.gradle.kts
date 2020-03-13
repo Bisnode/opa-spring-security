@@ -1,4 +1,8 @@
-description = "Autoconfiguration project for OPA Spring Security filter"
+ext {
+    set("pomName", "OPA Spring Security filter autoconfiguration")
+    set("pomDescription", "Autoconfiguration project for OPA Spring Security filter")
+}
+
 
 dependencies {
     implementation(project(Project.core))

@@ -1,4 +1,7 @@
-project.description = "Spring filter that uses Open Policy Agent to allow and deny access"
+ext {
+    set("pomName", "OPA Spring Security filter")
+    set("pomDescription", "Spring filter that uses Open Policy Agent to allow and deny access")
+}
 
 dependencies {
     api(Opa.client)

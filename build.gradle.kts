@@ -27,15 +27,23 @@ subprojects {
     configure<CodeNarcExtension> {
         reportFormat = "console"
     }
+}
 
+tasks.wrapper {
+    gradleVersion = Versions.gradle
+}
+
+// anything below this line will be evaluated AFTER the children
+evaluationDependsOnChildren()
+subprojects {
     configure<PublishingExtension> {
         publications {
             create<MavenPublication>("${project.name}-module") {
                 artifactId = project.name
                 from(components["java"])
                 pom {
-                    name.set(project.name)
-                    description.set(project.description)
+                    name.set("${project.ext["pomName"]}")
+                    description.set("${project.ext["pomDescription"]}")
                     url.set("https://github.com/Bisnode/opa-spring-security")
                     licenses {
                         license {
@@ -75,9 +83,4 @@ subprojects {
             }
         }
     }
-}
-
-
-tasks.wrapper {
-    gradleVersion = Versions.gradle
 }
