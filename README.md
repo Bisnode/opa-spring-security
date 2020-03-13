@@ -1,5 +1,7 @@
 # OPA Spring Security Library
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.bisnode.opa/opa-filter-spring-boot-starter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.bisnode.opa/opa-filter-spring-boot-starter) ![build](https://github.com/Bisnode/opa-spring-security/workflows/build/badge.svg)
+
 OPA Spring Security is a library that enables using OPA for authorization in Spring applications.
 
 ## Installation
@@ -7,11 +9,13 @@ OPA Spring Security is a library that enables using OPA for authorization in Spr
 #### Prerequisites 
 
 - Java 11 or higher.
-- Your project has to have `org.springframework.security:spring-security-oauth2-jose` on classpath  
+- Your project has to have `org.springframework.security:spring-security-oauth2-jose` on classpath (it's a part of `spring-boot-starter-oauth2-resource-server`)
 
 #### Using the starter
 
 Add dependency using Maven
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.bisnode.opa/opa-filter-spring-boot-starter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.bisnode.opa/opa-filter-spring-boot-starter)
 
 ```xml
 <dependency>
