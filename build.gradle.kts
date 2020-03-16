@@ -1,5 +1,7 @@
+import java.util.Base64
+
 allprojects {
-    version = "0.0.2"
+    version = "0.0.3"
     group = "com.bisnode.opa"
 }
 
@@ -11,6 +13,7 @@ subprojects {
         plugin("java-library")
         plugin("groovy")
         plugin("maven-publish")
+        plugin("signing")
     }
 
     repositories {
@@ -82,5 +85,20 @@ subprojects {
                 url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
             }
         }
+    }
+
+    configure<SigningExtension> {
+        val signingKey: String? by project
+        val signingPassword: String? by project
+
+        // if on GitHub
+        if(signingKey != null && signingPassword != null) {
+            val decodedKey = signingKey
+                    ?.let { Base64.getDecoder().decode(signingKey) }
+                    ?.let { String(it) }
+            useInMemoryPgpKeys(decodedKey, signingPassword)
+        }
+
+        sign((project.properties["publishing"] as PublishingExtension).publications["${project.name}-module"])
     }
 }
