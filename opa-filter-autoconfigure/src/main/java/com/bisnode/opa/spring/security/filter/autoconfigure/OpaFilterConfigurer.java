@@ -5,11 +5,14 @@ import com.bisnode.opa.client.query.OpaQueryApi;
 import com.bisnode.opa.spring.security.filter.OpaFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 @Configuration
+@Order(Ordered.LOWEST_PRECEDENCE - 69) // to prevent clashes with multiple configurers
 class OpaFilterConfigurer extends WebSecurityConfigurerAdapter {
 
     private final OpaFilterConfiguration opaFilterConfiguration;
