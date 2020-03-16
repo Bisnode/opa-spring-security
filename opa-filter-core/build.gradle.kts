@@ -7,8 +7,7 @@ dependencies {
     api(Opa.client)
     implementation(Slf4j.api)
     implementation(SpringSecurity.web)
-    implementation(SpringSecurity.OAuth2.core)
-    implementation(SpringSecurity.OAuth2.jose)
+    implementation(SpringSecurity.oAuth2Core)
     implementation(Javax.servletApi)
 
     testImplementation(Spock.groovyLang)

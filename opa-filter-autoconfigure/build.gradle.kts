@@ -8,7 +8,7 @@ dependencies {
     implementation(project(Project.core))
 
     implementation(SpringSecurity.config)
-    implementation(SpringSecurity.OAuth2.resourceServer)
+    implementation(SpringSecurity.web)
     implementation(Javax.servletApi)
     implementation(SpringBoot.autoconfigure)
 

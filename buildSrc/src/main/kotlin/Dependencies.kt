@@ -23,11 +23,7 @@ object SpringBoot {
 object SpringSecurity {
     const val config = "org.springframework.security:spring-security-config:${Versions.springSecurity}"
     const val web = "org.springframework.security:spring-security-web:${Versions.springSecurity}"
-    object OAuth2 {
-        const val core = "org.springframework.security:spring-security-oauth2-core:${Versions.springSecurity}"
-        const val jose = "org.springframework.security:spring-security-oauth2-jose:${Versions.springSecurity}"
-        const val resourceServer = "org.springframework.security:spring-security-oauth2-resource-server:${Versions.springSecurity}"
-    }
+    const val oAuth2Core = "org.springframework.security:spring-security-oauth2-core:${Versions.springSecurity}"
 }
 
 object Opa {
