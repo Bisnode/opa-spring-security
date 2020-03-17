@@ -8,8 +8,7 @@ OPA Spring Security is a library that enables using OPA for authorization in Spr
 
 #### Prerequisites 
 
-- Java 11 or higher.
-- Your project has to have `org.springframework.security:spring-security-oauth2-jose` on classpath (it's a part of `spring-boot-starter-oauth2-resource-server`)
+- Java 11 or higher
 
 #### Using the starter
 
