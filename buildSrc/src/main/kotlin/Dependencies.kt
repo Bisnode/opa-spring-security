@@ -3,6 +3,7 @@ object Versions {
 
     const val springBoot = "2.2.4.RELEASE"
     const val springSecurity = "5.2.2.RELEASE"
+    const val legacySecurity = "2.4.0.RELEASE"
     const val opaClient = "0.0.1"
     const val javaxServletApi = "4.0.1"
     const val slf4j = "1.7.30"
@@ -23,7 +24,11 @@ object SpringBoot {
 object SpringSecurity {
     const val config = "org.springframework.security:spring-security-config:${Versions.springSecurity}"
     const val web = "org.springframework.security:spring-security-web:${Versions.springSecurity}"
-    const val oAuth2Core = "org.springframework.security:spring-security-oauth2-core:${Versions.springSecurity}"
+    object OAuth2 {
+        const val core = "org.springframework.security:spring-security-oauth2-core:${Versions.springSecurity}"
+        const val legacy = "org.springframework.security.oauth:spring-security-oauth2:${Versions.legacySecurity}"
+    }
+
 }
 
 object Opa {

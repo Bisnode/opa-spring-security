@@ -8,6 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.context.annotation.Bean
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.core.userdetails.User
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -24,6 +28,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 )
 class OpaFilterConfigurerSpec extends Specification {
 
+    private static final String BASIC_AUTH_HEADER = "Basic ${Base64.encoder.encodeToString("someone:strongPass".getBytes())}"
     static final int OPA_PORT = 8181
 
     @LocalServerPort
@@ -56,7 +61,7 @@ class OpaFilterConfigurerSpec extends Specification {
                     )
             )
         when:
-            restClient.get(path: '/')
+            restClient.get(path: '/', headers: ["Authorization": BASIC_AUTH_HEADER])
 
         then:
             HttpResponseException e = thrown(HttpResponseException)
@@ -73,19 +78,48 @@ class OpaFilterConfigurerSpec extends Specification {
                     )
             )
         when:
-            def response = restClient.get(path: '/')
+            def response = restClient.get(path: '/', headers: ["Authorization": BASIC_AUTH_HEADER])
 
         then:
             noExceptionThrown()
             response.status == 200
     }
 
+    def 'should not ask opa for unauthenticated user'() {
+        given:
+            wireMockServer.stubFor(any(anyUrl())
+                    .willReturn(aResponse()
+                            .withStatus(200)
+                            .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
+                            .withBody('{"result": {"allow": true}}')
+                    )
+            )
+        when:
+            def response = restClient.get(path: '/')
+
+        then:
+            HttpResponseException e = thrown(HttpResponseException)
+            e.response.status == 401
+    }
+
     @TestConfiguration
-    static class TestConfig {
+    @EnableWebSecurity
+    static class TestConfig extends WebSecurityConfigurerAdapter {
 
         @Bean
         OpaFilterConfiguration opaFilterConfiguration() {
             new OpaFilterConfiguration(true, 'some/policy', "http://localhost:$OPA_PORT")
+        }
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.inMemoryAuthentication().withUser(
+                    User.builder()
+                            .username("someone")
+                            .password("{noop}strongPass")
+                            .roles("USER")
+                            .build()
+            )
         }
 
     }

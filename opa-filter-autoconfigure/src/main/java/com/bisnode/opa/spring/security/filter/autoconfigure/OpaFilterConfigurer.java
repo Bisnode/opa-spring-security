@@ -4,31 +4,19 @@ import com.bisnode.opa.client.OpaClient;
 import com.bisnode.opa.client.query.OpaQueryApi;
 import com.bisnode.opa.spring.security.filter.OpaFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 @Configuration
-@Order(Ordered.LOWEST_PRECEDENCE - 69) // to prevent clashes with multiple configurers
-class OpaFilterConfigurer extends WebSecurityConfigurerAdapter {
-
-    private final OpaFilterConfiguration opaFilterConfiguration;
+class OpaFilterConfigurer extends FilterRegistrationBean<OpaFilter> {
 
     @Autowired
     OpaFilterConfigurer(OpaFilterConfiguration opaFilterConfiguration) {
-        this.opaFilterConfiguration = opaFilterConfiguration;
+        OpaFilter opaFilter = new OpaFilter(newOpaClient(opaFilterConfiguration), opaFilterConfiguration.getDocumentPath());
+        setFilter(opaFilter);
     }
 
-    @Override
-    public void configure(HttpSecurity http) {
-        OpaFilter opaFilter = new OpaFilter(newOpaClient(), opaFilterConfiguration.getDocumentPath());
-        http.addFilterAfter(opaFilter, FilterSecurityInterceptor.class);
-    }
-
-    private OpaQueryApi newOpaClient() {
+    private OpaQueryApi newOpaClient(OpaFilterConfiguration opaFilterConfiguration) {
         return OpaClient.builder()
                 .opaConfiguration(opaFilterConfiguration.getInstance())
                 .build();
