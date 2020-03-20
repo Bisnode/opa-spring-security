@@ -6,11 +6,8 @@ import com.bisnode.opa.spring.security.filter.OpaFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 @Configuration
-@Order(Ordered.LOWEST_PRECEDENCE - 69) // to prevent clashes with multiple configurers
 class OpaFilterConfigurer extends FilterRegistrationBean<OpaFilter> {
 
     @Autowired
