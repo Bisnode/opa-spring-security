@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.AbstractOAuth2Token;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static java.util.function.Predicate.not;
 
 class Jwt {
@@ -32,13 +34,22 @@ class Jwt {
             return Optional.empty();
         }
 
-        if (!(authentication.getCredentials() instanceof AbstractOAuth2Token)) {
-            log.warn("Authentication credentials not an instance of AbstractOAuth2Token.");
-            return Optional.empty();
+        // For Spring Security in Spring < 5
+        if (authentication.getDetails() instanceof OAuth2AuthenticationDetails) {
+            final String accessToken = ((OAuth2AuthenticationDetails) authentication.getDetails()).getTokenValue();
+            if (nonNull(accessToken) && !accessToken.isBlank()) {
+                return Optional.of(accessToken);
+            }
         }
 
-        final String accessToken = ((AbstractOAuth2Token) authentication.getCredentials()).getTokenValue();
-        return Optional.ofNullable(accessToken);
+        // For Spring Security in Spring >= 5
+        if (authentication.getCredentials() instanceof AbstractOAuth2Token) {
+            final String accessToken = ((AbstractOAuth2Token) authentication.getCredentials()).getTokenValue();
+            return Optional.ofNullable(accessToken).filter(not(String::isBlank));
+        }
+
+        log.warn("Could not find access token in Authentication");
+        return Optional.empty();
     }
 
     /**
