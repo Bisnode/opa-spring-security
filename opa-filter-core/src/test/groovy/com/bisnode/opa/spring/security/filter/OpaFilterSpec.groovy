@@ -20,7 +20,7 @@ class OpaFilterSpec extends Specification {
         given:
             FilterChain filterChain = Mock()
             HttpServletRequest httpServletRequest = Mock()
-            decider.decideBy(httpServletRequest) >> new AccessDecision(allow: false)
+            decider.decideFor(httpServletRequest) >> new AccessDecision(allow: false)
 
         when:
             opaFilter.doFilter(httpServletRequest, null, filterChain)
@@ -34,7 +34,7 @@ class OpaFilterSpec extends Specification {
         given:
             FilterChain filterChain = Mock()
             HttpServletRequest httpServletRequest = Mock()
-            decider.decideBy(httpServletRequest) >> new AccessDecision()
+            decider.decideFor(httpServletRequest) >> new AccessDecision()
 
         when:
             opaFilter.doFilter(httpServletRequest, null, filterChain)
@@ -48,7 +48,7 @@ class OpaFilterSpec extends Specification {
         given:
             FilterChain filterChain = Mock()
             HttpServletRequest httpServletRequest = Mock()
-            decider.decideBy(httpServletRequest) >> new AccessDecision(allow: true)
+            decider.decideFor(httpServletRequest) >> new AccessDecision(allow: true)
 
         when:
             opaFilter.doFilter(httpServletRequest, null, filterChain)

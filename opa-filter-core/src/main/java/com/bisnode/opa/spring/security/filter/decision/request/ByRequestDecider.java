@@ -53,7 +53,7 @@ public class ByRequestDecider implements AccessDecider<HttpServletRequest> {
      * @return {@link AccessDecision} returned by OPA.
      */
     @Override
-    public AccessDecision decideBy(HttpServletRequest request) {
+    public AccessDecision decideFor(HttpServletRequest request) {
         QueryForDocumentRequest queryForDocumentRequest = new QueryForDocumentRequest(requestSupplier.get(request), documentPath);
         log.trace("Asking OPA for access to {} {}", request.getMethod(), request.getServletPath());
         return opaQueryApi.queryForDocument(queryForDocumentRequest, AccessDecision.class);

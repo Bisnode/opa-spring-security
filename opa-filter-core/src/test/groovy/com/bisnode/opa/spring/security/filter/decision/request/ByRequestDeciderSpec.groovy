@@ -18,7 +18,7 @@ class ByRequestDeciderSpec extends Specification {
             ByRequestDecider decider = new ByRequestDecider(opaQueryApi, SOME_DOCUMENT_PATH, opaRequestSupplier)
 
         when:
-            AccessDecision actualAccessDecision = decider.decideBy(Mock(HttpServletRequest))
+            AccessDecision actualAccessDecision = decider.decideFor(Mock(HttpServletRequest))
 
         then:
             1 * opaRequestSupplier.get(_ as HttpServletRequest) >> opaInput

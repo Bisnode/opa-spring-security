@@ -53,7 +53,7 @@ public class OpaFilter extends GenericFilterBean {
 
     private void decideFor(HttpServletRequest httpRequest) {
         try {
-            AccessDecision accessDecision = decider.decideBy(httpRequest);
+            AccessDecision accessDecision = decider.decideFor(httpRequest);
             log.trace("OPA response is 'allow': {} for access to {} {}", accessDecision.getAllow(), httpRequest.getMethod(), httpRequest.getServletPath());
             if (!accessDecision.isAllow()) {
                 denyAccess(accessDecision);
