@@ -34,11 +34,11 @@ implementation 'com.bisnode.opa:opa-filter-spring-boot-starter:{version}'
 
 **All properties are prefixed with `opa.filter`**
 
-| Property       | Default value | Description                                  | Example                    |
-|----------------|---------------|----------------------------------------------|----------------------------|
-| `enabled`      |    `true`     | Whether the filter should be enabled         | _false_                    |
-| `documentPath` |               | Name of OPA document path to use for queries | _"http/request/authz"_     |
-| `instance`     |               | Address of OPA instance                      | _"http://localhost:8181/"_ |
+| Property       | Default value           | Description                                  | Example                |
+|----------------|-------------------------|----------------------------------------------|------------------------|
+| `enabled`      |          `true`         | Whether the filter should be enabled         |                        |
+| `documentPath` |                         | Name of OPA document path to use for queries | _"http/request/authz"_ |
+| `instance`     | `http://localhost:8181` | Address of OPA instance                      |                        |
 
 ## Policy requirements
 
@@ -55,7 +55,7 @@ Those properties are available in your policy's `input`.
 Your OPA policy response should contain following properties:
 
 - `allow` - with value `true` if to requested resource should be allowed. `false` otherwise 
-- `reason` - an **optional** string containing reason behind given decision, it will be supplied to exception message 
+- `reason` - an **optional** string containing reason behind given accessDecision, it will be supplied to exception message 
 
 Unknown properties are ignored.
 

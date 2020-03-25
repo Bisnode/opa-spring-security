@@ -1,4 +1,4 @@
-package com.bisnode.opa.spring.security.filter
+package com.bisnode.opa.spring.security.filter.decision.request
 
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext

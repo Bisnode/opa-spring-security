@@ -39,7 +39,7 @@ class OpaSpringFilterAutoConfigurationOnSpec extends Specification implements Be
 
     def 'should read properties'() {
         expect:
-            opaFilterConfiguration.instance == 'http://someUrl:1234/'
+            opaFilterConfiguration.instance == URI.create('http://someUrl:1234/')
             opaFilterConfiguration.documentPath == 'some/policy'
     }
 
