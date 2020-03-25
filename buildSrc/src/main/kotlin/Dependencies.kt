@@ -2,7 +2,7 @@ object Versions {
     const val gradle = "6.2.2"
 
     const val springBoot = "2.2.4.RELEASE"
-    const val springSecurity = "5.2.2.RELEASE"
+    const val spring = "5.2.2.RELEASE"
     const val legacySecurity = "2.4.0.RELEASE"
     const val opaClient = "0.0.1"
     const val javaxServletApi = "4.0.1"
@@ -22,14 +22,16 @@ object SpringBoot {
 }
 
 object SpringSecurity {
-    const val config = "org.springframework.security:spring-security-config:${Versions.springSecurity}"
-    const val web = "org.springframework.security:spring-security-web:${Versions.springSecurity}"
+    const val config = "org.springframework.security:spring-security-config:${Versions.spring}"
+    const val web = "org.springframework.security:spring-security-web:${Versions.spring}"
+
     object OAuth2 {
-        const val core = "org.springframework.security:spring-security-oauth2-core:${Versions.springSecurity}"
+        const val core = "org.springframework.security:spring-security-oauth2-core:${Versions.spring}"
         const val legacy = "org.springframework.security.oauth:spring-security-oauth2:${Versions.legacySecurity}"
     }
 
 }
+
 
 object Opa {
     const val client = "com.bisnode.opa:opa-java-client:${Versions.opaClient}"
@@ -40,6 +42,7 @@ object Testing {
     const val springBootStarterWeb = "org.springframework.boot:spring-boot-starter-web:${Versions.springBoot}"
     const val wiremock = "com.github.tomakehurst:wiremock-jre8:${Versions.wiremock}"
     const val httpClient = "org.codehaus.groovy.modules.http-builder:http-builder:${Versions.httpClient}"
+    const val springTest = "org.springframework:spring-test:${Versions.spring}"
 }
 
 object Spock {

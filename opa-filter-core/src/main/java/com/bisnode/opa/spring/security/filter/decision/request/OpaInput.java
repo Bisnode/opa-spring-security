@@ -1,9 +1,7 @@
-package com.bisnode.opa.spring.security.filter;
+package com.bisnode.opa.spring.security.filter.decision.request;
 
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-
-import javax.servlet.http.HttpServletRequest;
 
 class OpaInput {
     private final String path;
@@ -14,12 +12,6 @@ class OpaInput {
         this.path = path;
         this.method = method;
         this.encodedJwt = encodedJwt;
-    }
-
-    static Builder builderFrom(HttpServletRequest httpRequest) {
-        return OpaInput.builder()
-                .method(httpRequest.getMethod())
-                .path(httpRequest.getServletPath());
     }
 
     @NonNull

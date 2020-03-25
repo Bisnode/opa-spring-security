@@ -108,7 +108,7 @@ class OpaFilterConfigurerSpec extends Specification {
 
         @Bean
         OpaFilterConfiguration opaFilterConfiguration() {
-            new OpaFilterConfiguration(true, 'some/policy', "http://localhost:$OPA_PORT")
+            new OpaFilterConfiguration('some/policy', URI.create("http://localhost:$OPA_PORT"))
         }
 
         @Override

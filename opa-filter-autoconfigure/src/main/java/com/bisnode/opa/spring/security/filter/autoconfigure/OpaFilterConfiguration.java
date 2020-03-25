@@ -3,18 +3,18 @@ package com.bisnode.opa.spring.security.filter.autoconfigure;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.net.URI;
+
 @Configuration
 @ConfigurationProperties(prefix = "opa.filter")
 class OpaFilterConfiguration {
-    private boolean enabled;
     private String documentPath;
-    private String instance;
+    private URI instance = URI.create("http://localhost:8080");
 
     OpaFilterConfiguration() {
     }
 
-    OpaFilterConfiguration(boolean enabled, String documentPath, String instance) {
-        this.enabled = enabled;
+    OpaFilterConfiguration(String documentPath, URI instance) {
         this.documentPath = documentPath;
         this.instance = instance;
     }
@@ -23,7 +23,7 @@ class OpaFilterConfiguration {
         return this.documentPath;
     }
 
-    public String getInstance() {
+    public URI getInstance() {
         return this.instance;
     }
 
@@ -31,16 +31,8 @@ class OpaFilterConfiguration {
         this.documentPath = documentPath;
     }
 
-    public void setInstance(String instance) {
+    public void setInstance(URI instance) {
         this.instance = instance;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
 }

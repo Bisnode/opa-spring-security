@@ -11,6 +11,7 @@ dependencies {
     implementation(SpringSecurity.OAuth2.legacy)
     implementation(Javax.servletApi)
 
+    testImplementation(Testing.springTest)
     testImplementation(Spock.groovyLang)
     testImplementation(Spock.core)
     testRuntimeOnly(Spock.byteBuddy)

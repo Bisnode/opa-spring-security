@@ -1,4 +1,4 @@
-package com.bisnode.opa.spring.security.filter;
+package com.bisnode.opa.spring.security.filter.decision.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
