@@ -9,7 +9,7 @@ import java.net.URI;
 @ConfigurationProperties(prefix = "opa.filter")
 class OpaFilterConfiguration {
     private String documentPath;
-    private URI instance = URI.create("http://localhost:8080");
+    private URI instance = URI.create("http://localhost:8181");
 
     OpaFilterConfiguration() {
     }
