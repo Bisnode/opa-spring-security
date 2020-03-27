@@ -59,7 +59,7 @@ class OpaFilterConfigurerSpec extends Specification {
         restClient = new RESTClient("http://localhost:$applicationPort", APPLICATION_JSON)
     }
 
-    def 'should return 403 on opa deny'() {
+    def 'should return 403 on OPA deny'() {
         given:
           wireMockServer.stubFor(any(anyUrl())
                   .willReturn(aResponse()
@@ -76,7 +76,7 @@ class OpaFilterConfigurerSpec extends Specification {
           e.response.status == 403
     }
 
-    def 'should publish AuthorizationFailureEvent on opa deny'() {
+    def 'should publish AuthorizationFailureEvent on OPA deny'() {
         given:
           wireMockServer.stubFor(any(anyUrl())
                   .willReturn(aResponse()
@@ -93,7 +93,7 @@ class OpaFilterConfigurerSpec extends Specification {
           1 * applicationEventPublisherMock.publishEvent(_ as AuthorizationFailureEvent)
     }
 
-    def 'should return 200 on opa allow'() {
+    def 'should return 200 on OPA allow'() {
         given:
           wireMockServer.stubFor(any(anyUrl())
                   .willReturn(aResponse()
@@ -110,7 +110,24 @@ class OpaFilterConfigurerSpec extends Specification {
           response.status == 200
     }
 
-    def 'should not ask opa for unauthenticated user'() {
+    def 'should return 403 on invalid result from OPA'() {
+        given:
+          wireMockServer.stubFor(any(anyUrl())
+                  .willReturn(aResponse()
+                          .withStatus(200)
+                          .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
+                          .withBody('{"result": {}}')
+                  )
+          )
+        when:
+          restClient.get(path: '/', headers: ["Authorization": BASIC_AUTH_HEADER])
+
+        then:
+          HttpResponseException e = thrown(HttpResponseException)
+          e.response.status == 403
+    }
+
+    def 'should not ask OPA for unauthenticated user'() {
         given:
           wireMockServer.stubFor(any(anyUrl())
                   .willReturn(aResponse()
