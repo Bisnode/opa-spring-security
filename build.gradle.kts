@@ -1,4 +1,4 @@
-import java.util.*
+import java.util.Base64
 
 allprojects {
     version = "2.0.0-SNAPSHOT"
