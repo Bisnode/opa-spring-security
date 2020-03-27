@@ -1,7 +1,7 @@
-import java.util.Base64
+import java.util.*
 
 allprojects {
-    version = "1.0.0-SNAPSHOT"
+    version = "2.0.0-SNAPSHOT"
     group = "com.bisnode.opa"
 }
 
