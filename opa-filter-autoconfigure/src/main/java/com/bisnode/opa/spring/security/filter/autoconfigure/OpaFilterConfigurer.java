@@ -7,6 +7,7 @@ import com.bisnode.opa.spring.security.filter.decision.AccessDecider;
 import com.bisnode.opa.spring.security.filter.decision.request.ByRequestDecider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,13 +17,13 @@ import java.net.URI;
 class OpaFilterConfigurer extends FilterRegistrationBean<OpaFilter> {
 
     @Autowired
-    OpaFilterConfigurer(OpaFilterConfiguration configuration) {
+    OpaFilterConfigurer(OpaFilterConfiguration configuration, ApplicationEventPublisher eventPublisher) {
         AccessDecider<HttpServletRequest> decider = ByRequestDecider.withDefaultSupplier(
                 newOpaClient(configuration.getInstance()),
                 configuration.getDocumentPath()
         );
 
-        setFilter(new OpaFilter(decider));
+        setFilter(new OpaFilter(decider, eventPublisher));
     }
 
     private OpaQueryApi newOpaClient(URI instance) {

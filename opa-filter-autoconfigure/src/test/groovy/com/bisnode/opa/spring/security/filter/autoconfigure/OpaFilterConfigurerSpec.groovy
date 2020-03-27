@@ -4,16 +4,21 @@ import com.bisnode.opa.client.rest.ContentType
 import com.github.tomakehurst.wiremock.WireMockServer
 import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Primary
+import org.springframework.security.access.event.AuthorizationFailureEvent
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.userdetails.User
 import spock.lang.Shared
 import spock.lang.Specification
+import spock.mock.DetachedMockFactory
 
 import static com.bisnode.opa.client.rest.ContentType.Values.APPLICATION_JSON
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
@@ -34,6 +39,9 @@ class OpaFilterConfigurerSpec extends Specification {
     @LocalServerPort
     int applicationPort
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisherMock
+
     @Shared
     private WireMockServer wireMockServer = new WireMockServer(OPA_PORT)
 
@@ -51,55 +59,89 @@ class OpaFilterConfigurerSpec extends Specification {
         restClient = new RESTClient("http://localhost:$applicationPort", APPLICATION_JSON)
     }
 
-    def 'should return 403 on opa deny'() {
+    def 'should return 403 on OPA deny'() {
         given:
-            wireMockServer.stubFor(any(anyUrl())
-                    .willReturn(aResponse()
-                            .withStatus(200)
-                            .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
-                            .withBody('{"result": {"allow": false}}')
-                    )
-            )
+          wireMockServer.stubFor(any(anyUrl())
+                  .willReturn(aResponse()
+                          .withStatus(200)
+                          .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
+                          .withBody('{"result": {"allow": false}}')
+                  )
+          )
         when:
-            restClient.get(path: '/', headers: ["Authorization": BASIC_AUTH_HEADER])
+          restClient.get(path: '/', headers: ["Authorization": BASIC_AUTH_HEADER])
 
         then:
-            HttpResponseException e = thrown(HttpResponseException)
-            e.response.status == 403
+          HttpResponseException e = thrown(HttpResponseException)
+          e.response.status == 403
     }
 
-    def 'should return 200 on opa allow'() {
+    def 'should publish AuthorizationFailureEvent on OPA deny'() {
         given:
-            wireMockServer.stubFor(any(anyUrl())
-                    .willReturn(aResponse()
-                            .withStatus(200)
-                            .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
-                            .withBody('{"result": {"allow": true}}')
-                    )
-            )
+          wireMockServer.stubFor(any(anyUrl())
+                  .willReturn(aResponse()
+                          .withStatus(200)
+                          .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
+                          .withBody('{"result": {"allow": false}}')
+                  )
+          )
         when:
-            def response = restClient.get(path: '/', headers: ["Authorization": BASIC_AUTH_HEADER])
+          restClient.get(path: '/', headers: ["Authorization": BASIC_AUTH_HEADER])
 
         then:
-            noExceptionThrown()
-            response.status == 200
+          thrown(HttpResponseException)
+          1 * applicationEventPublisherMock.publishEvent(_ as AuthorizationFailureEvent)
     }
 
-    def 'should not ask opa for unauthenticated user'() {
+    def 'should return 200 on OPA allow'() {
         given:
-            wireMockServer.stubFor(any(anyUrl())
-                    .willReturn(aResponse()
-                            .withStatus(200)
-                            .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
-                            .withBody('{"result": {"allow": true}}')
-                    )
-            )
+          wireMockServer.stubFor(any(anyUrl())
+                  .willReturn(aResponse()
+                          .withStatus(200)
+                          .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
+                          .withBody('{"result": {"allow": true}}')
+                  )
+          )
         when:
-            def response = restClient.get(path: '/')
+          def response = restClient.get(path: '/', headers: ["Authorization": BASIC_AUTH_HEADER])
 
         then:
-            HttpResponseException e = thrown(HttpResponseException)
-            e.response.status == 401
+          noExceptionThrown()
+          response.status == 200
+    }
+
+    def 'should return 403 on invalid result from OPA'() {
+        given:
+          wireMockServer.stubFor(any(anyUrl())
+                  .willReturn(aResponse()
+                          .withStatus(200)
+                          .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
+                          .withBody('{"result": {}}')
+                  )
+          )
+        when:
+          restClient.get(path: '/', headers: ["Authorization": BASIC_AUTH_HEADER])
+
+        then:
+          HttpResponseException e = thrown(HttpResponseException)
+          e.response.status == 403
+    }
+
+    def 'should not ask OPA for unauthenticated user'() {
+        given:
+          wireMockServer.stubFor(any(anyUrl())
+                  .willReturn(aResponse()
+                          .withStatus(200)
+                          .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
+                          .withBody('{"result": {"allow": true}}')
+                  )
+          )
+        when:
+          restClient.get(path: '/')
+
+        then:
+          HttpResponseException e = thrown(HttpResponseException)
+          e.response.status == 401
     }
 
     @TestConfiguration
@@ -109,6 +151,12 @@ class OpaFilterConfigurerSpec extends Specification {
         @Bean
         OpaFilterConfiguration opaFilterConfiguration() {
             new OpaFilterConfiguration('some/policy', URI.create("http://localhost:$OPA_PORT"))
+        }
+
+        @Bean
+        @Primary
+        ApplicationEventPublisher applicationEventPublisher() {
+            return new DetachedMockFactory().Mock(ApplicationEventPublisher)
         }
 
         @Override

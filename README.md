@@ -70,6 +70,8 @@ Unknown properties are ignored.
 > }
 > ```
 
+## Published events
+When library denies access to the resource, `AuthorizationFailureEvent` is published and therefore can be used in user's code. 
 
 
 ## Developing and building

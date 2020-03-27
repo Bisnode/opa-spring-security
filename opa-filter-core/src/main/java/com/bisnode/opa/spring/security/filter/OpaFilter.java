@@ -5,8 +5,11 @@ import com.bisnode.opa.spring.security.filter.decision.AccessDecider;
 import com.bisnode.opa.spring.security.filter.decision.AccessDecision;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.event.AuthorizationFailureEvent;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -15,32 +18,48 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 public class OpaFilter extends GenericFilterBean {
 
     private static final Logger log = LoggerFactory.getLogger(OpaFilter.class);
 
     private final AccessDecider<HttpServletRequest> decider;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * Creates new {@link OpaFilter} instance.
      *
-     * @param decider {@link AccessDecider} to use in {@link OpaFilter#doFilter(ServletRequest, ServletResponse, FilterChain)} method.
+     * @param decider        {@link AccessDecider} to use in {@link OpaFilter#doFilter(ServletRequest, ServletResponse, FilterChain)} method.
+     * @param eventPublisher {@link ApplicationEventPublisher} to publish events when deny occurs
+     */
+    public OpaFilter(@NonNull AccessDecider<HttpServletRequest> decider, ApplicationEventPublisher eventPublisher) {
+        this.decider = decider;
+        this.eventPublisher = eventPublisher;
+    }
+
+    /**
+     * Creates new {@link OpaFilter} instance.
+     *
+     * @param decider        {@link AccessDecider} to use in {@link OpaFilter#doFilter(ServletRequest, ServletResponse, FilterChain)} method.
      */
     public OpaFilter(@NonNull AccessDecider<HttpServletRequest> decider) {
         this.decider = decider;
+        this.eventPublisher = event -> { };
     }
 
     /**
      * Filters request using {@link AccessDecider}.
-     * If OPA decides access should be denied {@link AccessDeniedException} is thrown. Otherwise, the filtering is passed back to the chain.
+     * If OPA decides access should be denied {@link AccessDeniedException} is thrown
+     * and {@link AuthorizationFailureEvent} is published, if publisher is provided.
+     * Otherwise, the filtering is passed back to the chain.
      *
-     * @param request the {@link HttpServletRequest} object containing the client's request.
+     * @param request  the {@link HttpServletRequest} object containing the client's request.
      * @param response unused.
-     * @param chain the {@link FilterChain} for invoking the next filter.
-     * @throws IOException if an I/O related error has occurred during the processing.
-     * @throws ServletException if an exception occurs that interferes with the
-     *                          filter's normal operation.
+     * @param chain    the {@link FilterChain} for invoking the next filter.
+     * @throws IOException           if an I/O related error has occurred during the processing.
+     * @throws ServletException      if an exception occurs that interferes with the
+     *                               filter's normal operation.
      * @throws AccessDeniedException when OPA decides access should be denied or fails to respond.
      */
     @Override
@@ -66,7 +85,11 @@ public class OpaFilter extends GenericFilterBean {
     private void denyAccess(AccessDecision accessDecision) {
         String rejectionMessage = String.format("Access request rejected by OPA because: %s", accessDecision.getReason());
         log.debug(rejectionMessage);
-        throw new AccessDeniedException(rejectionMessage);
+        AccessDeniedException accessDeniedException = new AccessDeniedException(rejectionMessage);
+        AuthorizationFailureEvent event = new AuthorizationFailureEvent(
+                this, List.of(), SecurityContextHolder.getContext().getAuthentication(), accessDeniedException);
+        eventPublisher.publishEvent(event);
+        throw accessDeniedException;
     }
 
     private void logAndDeny(HttpServletRequest httpRequest, OpaClientException opaException) {
