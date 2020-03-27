@@ -39,9 +39,20 @@ public class OpaFilter extends GenericFilterBean {
     }
 
     /**
+     * Creates new {@link OpaFilter} instance.
+     *
+     * @param decider        {@link AccessDecider} to use in {@link OpaFilter#doFilter(ServletRequest, ServletResponse, FilterChain)} method.
+     */
+    public OpaFilter(@NonNull AccessDecider<HttpServletRequest> decider) {
+        this.decider = decider;
+        this.eventPublisher = event -> { };
+    }
+
+    /**
      * Filters request using {@link AccessDecider}.
      * If OPA decides access should be denied {@link AccessDeniedException} is thrown
-     * and {@link AuthorizationFailureEvent} is published. Otherwise, the filtering is passed back to the chain.
+     * and {@link AuthorizationFailureEvent} is published, if publisher is provided.
+     * Otherwise, the filtering is passed back to the chain.
      *
      * @param request  the {@link HttpServletRequest} object containing the client's request.
      * @param response unused.
