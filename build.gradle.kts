@@ -1,7 +1,7 @@
 import java.util.Base64
 
 allprojects {
-    version = "1.1.0-SNAPSHOT"
+    version = "1.1.0"
     group = "com.bisnode.opa"
 }
 
