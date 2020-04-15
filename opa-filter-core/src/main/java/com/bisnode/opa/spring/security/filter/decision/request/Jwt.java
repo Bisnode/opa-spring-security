@@ -30,7 +30,7 @@ class Jwt {
 
     private static Optional<String> extractAccessToken(final Authentication authentication) {
         if (isNull(authentication)) {
-            log.warn("Received null authentication");
+            log.info("Received null authentication");
             return Optional.empty();
         }
 
@@ -48,7 +48,7 @@ class Jwt {
             return Optional.ofNullable(accessToken).filter(not(String::isBlank));
         }
 
-        log.warn("Could not find access token in Authentication");
+        log.info("Could not find access token in Authentication");
         return Optional.empty();
     }
 
