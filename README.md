@@ -1,6 +1,6 @@
 # OPA Spring Security Library
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.bisnode.opa/opa-filter-spring-boot-starter?color=light-green)](https://search.maven.org/artifact/com.bisnode.opa/opa-filter-spring-boot-starter) ![build](https://github.com/Bisnode/opa-spring-security/workflows/build/badge.svg)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.bisnode.opa/opa-filter-spring-boot-starter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.bisnode.opa/opa-filter-spring-boot-starter) ![build](https://github.com/Bisnode/opa-spring-security/workflows/build/badge.svg)
 
 OPA Spring Security is a library that enables using OPA for authorization in Spring applications.
 
@@ -14,7 +14,7 @@ OPA Spring Security is a library that enables using OPA for authorization in Spr
 
 Add dependency using Maven
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.bisnode.opa/opa-filter-spring-boot-starter?color=light-green)](https://maven-badges.herokuapp.com/maven-central/com.bisnode.opa/opa-filter-spring-boot-starter)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.bisnode.opa/opa-filter-spring-boot-starter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.bisnode.opa/opa-filter-spring-boot-starter)
 
 ```xml
 <dependency>
