@@ -9,9 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Configuration
 class OpaFilterConfigurer extends FilterRegistrationBean<OpaFilter> {
@@ -22,13 +29,24 @@ class OpaFilterConfigurer extends FilterRegistrationBean<OpaFilter> {
                 newOpaClient(configuration.getInstance()),
                 configuration.getDocumentPath()
         );
+        RequestMatcher whitelistRequestMatcher = whitelistRequestMatcher(configuration.getWhitelist());
 
-        setFilter(new OpaFilter(decider, eventPublisher));
+        setFilter(new OpaFilter(decider, eventPublisher, whitelistRequestMatcher));
     }
 
     private OpaQueryApi newOpaClient(URI instance) {
         return OpaClient.builder()
                 .opaConfiguration(instance.toString())
                 .build();
+    }
+
+    private RequestMatcher whitelistRequestMatcher(String whitelistPatterns) {
+        List<RequestMatcher> matchers = Optional.ofNullable(whitelistPatterns)
+                .map(s -> s.split(",")).stream().flatMap(Stream::of)
+                .map(String::trim)
+                .filter(String::isEmpty)
+                .map(AntPathRequestMatcher::new)
+                .collect(Collectors.toList());
+        return matchers.isEmpty() ? (request) -> false : new OrRequestMatcher(matchers);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.event.AuthorizationFailureEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -26,16 +27,21 @@ public class OpaFilter extends GenericFilterBean {
 
     private final AccessDecider<HttpServletRequest> decider;
     private final ApplicationEventPublisher eventPublisher;
+    private final RequestMatcher whitelistRequestMatcher;
 
     /**
      * Creates new {@link OpaFilter} instance.
      *
-     * @param decider        {@link AccessDecider} to use in {@link OpaFilter#doFilter(ServletRequest, ServletResponse, FilterChain)} method.
-     * @param eventPublisher {@link ApplicationEventPublisher} to publish events when deny occurs
+     * @param decider                 {@link AccessDecider} to use in {@link OpaFilter#doFilter(ServletRequest, ServletResponse, FilterChain)} method.
+     * @param eventPublisher          {@link ApplicationEventPublisher} to publish events when deny occurs
+     * @param whitelistRequestMatcher {@link RequestMatcher} to exclude requests for OPA filtering
      */
-    public OpaFilter(@NonNull AccessDecider<HttpServletRequest> decider, ApplicationEventPublisher eventPublisher) {
+    public OpaFilter(@NonNull AccessDecider<HttpServletRequest> decider,
+                     ApplicationEventPublisher eventPublisher,
+                     @NonNull RequestMatcher whitelistRequestMatcher) {
         this.decider = decider;
         this.eventPublisher = eventPublisher;
+        this.whitelistRequestMatcher = whitelistRequestMatcher;
     }
 
     /**
@@ -46,6 +52,7 @@ public class OpaFilter extends GenericFilterBean {
     public OpaFilter(@NonNull AccessDecider<HttpServletRequest> decider) {
         this.decider = decider;
         this.eventPublisher = event -> { };
+        this.whitelistRequestMatcher = request -> false;
     }
 
     /**
@@ -65,7 +72,14 @@ public class OpaFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
-            decideFor((HttpServletRequest) request);
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+
+            boolean whitelisted = whitelistRequestMatcher.matches(httpRequest);
+            if (!whitelisted) {
+                decideFor(httpRequest);
+            } else {
+                log.trace("Access allowed for whitelisted {} {}", httpRequest.getMethod(), httpRequest.getServletPath());
+            }
         }
         chain.doFilter(request, response);
     }
