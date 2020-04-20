@@ -4,7 +4,7 @@ object Versions {
     const val springBoot = "2.2.4.RELEASE"
     const val spring = "5.2.2.RELEASE"
     const val legacySecurity = "2.4.0.RELEASE"
-    const val opaClient = "0.0.1"
+    const val opaClient = "0.0.2"
     const val javaxServletApi = "4.0.1"
     const val slf4j = "1.7.30"
     const val groovy = "2.5.7"

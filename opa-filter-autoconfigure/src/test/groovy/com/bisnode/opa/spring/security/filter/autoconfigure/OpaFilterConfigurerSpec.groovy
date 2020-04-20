@@ -144,13 +144,30 @@ class OpaFilterConfigurerSpec extends Specification {
           e.response.status == 401
     }
 
+    def 'should not ask OPA for whitelisted path and authenticated user'() {
+        given:
+          wireMockServer.stubFor(any(anyUrl())
+                  .willReturn(aResponse()
+                          .withStatus(200)
+                          .withHeader(ContentType.HEADER_NAME, APPLICATION_JSON)
+                          .withBody('{"result": {"allow": false}}')
+                  )
+          )
+        when:
+          def response = restClient.get(path: '/whitelisted', headers: ["Authorization": BASIC_AUTH_HEADER])
+
+        then:
+          noExceptionThrown()
+          response.status == 200
+    }
+
     @TestConfiguration
     @EnableWebSecurity
     static class TestConfig extends WebSecurityConfigurerAdapter {
 
         @Bean
         OpaFilterConfiguration opaFilterConfiguration() {
-            new OpaFilterConfiguration('some/policy', URI.create("http://localhost:$OPA_PORT"))
+            new OpaFilterConfiguration('some/policy', ['/whitelisted'], URI.create("http://localhost:$OPA_PORT"))
         }
 
         @Bean
