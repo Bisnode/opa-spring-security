@@ -30,7 +30,7 @@ class OpaFilterConfigurer extends FilterRegistrationBean<OpaFilter> {
                 newOpaClient(configuration.getInstance()),
                 configuration.getDocumentPath()
         );
-        RequestMatcher whitelistRequestMatcher = whitelistRequestMatcher(configuration.getWhitelist());
+        RequestMatcher whitelistRequestMatcher = whitelistRequestMatcher(configuration.getEndpointsWhitelist());
 
         setFilter(new OpaFilter(decider, eventPublisher, whitelistRequestMatcher));
     }

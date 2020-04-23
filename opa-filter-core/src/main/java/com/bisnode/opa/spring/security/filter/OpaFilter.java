@@ -48,11 +48,20 @@ public class OpaFilter extends GenericFilterBean {
      * Creates new {@link OpaFilter} instance.
      *
      * @param decider        {@link AccessDecider} to use in {@link OpaFilter#doFilter(ServletRequest, ServletResponse, FilterChain)} method.
+     * @param eventPublisher {@link ApplicationEventPublisher} to publish events when deny occurs
+     */
+    public OpaFilter(@NonNull AccessDecider<HttpServletRequest> decider,
+                     ApplicationEventPublisher eventPublisher) {
+        this(decider, eventPublisher, request -> false);
+    }
+
+    /**
+     * Creates new {@link OpaFilter} instance.
+     *
+     * @param decider {@link AccessDecider} to use in {@link OpaFilter#doFilter(ServletRequest, ServletResponse, FilterChain)} method.
      */
     public OpaFilter(@NonNull AccessDecider<HttpServletRequest> decider) {
-        this.decider = decider;
-        this.eventPublisher = event -> { };
-        this.whitelistRequestMatcher = request -> false;
+        this(decider, event -> { }, request -> false);
     }
 
     /**
