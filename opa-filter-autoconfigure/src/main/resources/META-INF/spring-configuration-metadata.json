@@ -1,0 +1,26 @@
+{
+  "properties": [
+    {
+      "name": "opa.filter.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable security based on OPA web filter",
+      "defaultValue": true
+    },
+    {
+      "name": "opa.filter.documentPath",
+      "type": "java.lang.String",
+      "description": "Name of OPA policy path to use for queries (eg. this/is/path/to/policy)"
+    },
+    {
+      "name": "opa.filter.instance",
+      "type": "java.lang.String",
+      "description": "URL to OPA server, containing protocol, and port (eg. http://localhost:8181)",
+      "defaultValue": "http://localhost:8181"
+    },
+    {
+      "name": "opa.filter.endpointsWhitelist",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Comma-separated list of ant patterns to use for matching whitelisted endpoints (eg. /ping,/health,/info,/api-docs/**)"
+    }
+  ]
+}

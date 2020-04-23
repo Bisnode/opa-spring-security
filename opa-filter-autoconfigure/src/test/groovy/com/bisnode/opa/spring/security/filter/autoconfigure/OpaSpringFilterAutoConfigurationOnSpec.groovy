@@ -12,7 +12,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         classes = [SampleApplication],
         properties = [
                 "opa.filter.documentPath=some/policy",
-                "opa.filter.instance=http://someUrl:1234/"
+                "opa.filter.instance=http://someUrl:1234/",
+                "opa.filter.endpointsWhitelist=/some/whitelisted/endpoint/**"
         ],
         webEnvironment = MOCK
 )
@@ -41,6 +42,8 @@ class OpaSpringFilterAutoConfigurationOnSpec extends Specification implements Be
         expect:
             opaFilterConfiguration.instance == URI.create('http://someUrl:1234/')
             opaFilterConfiguration.documentPath == 'some/policy'
+            opaFilterConfiguration.endpointsWhitelist.contains('/some/whitelisted/endpoint/**')
+            opaFilterConfiguration.endpointsWhitelist.size() == 1
     }
 
 }

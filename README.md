@@ -34,11 +34,12 @@ implementation 'com.bisnode.opa:opa-filter-spring-boot-starter:{version}'
 
 **All properties are prefixed with `opa.filter`**
 
-| Property       | Default value           | Description                                  | Example                |
-|----------------|-------------------------|----------------------------------------------|------------------------|
-| `enabled`      |          `true`         | Whether the filter should be enabled         |                        |
-| `documentPath` |                         | Name of OPA document path to use for queries | _"http/request/authz"_ |
-| `instance`     | `http://localhost:8181` | Address of OPA instance                      |                        |
+| Property             | Default value           | Description                                                                    | Example                  |
+|----------------------|-------------------------|--------------------------------------------------------------------------------|--------------------------|
+| `enabled`            |          `true`         | Whether the filter should be enabled                                           |                          |
+| `documentPath`       |                         | Name of OPA document path to use for queries                                   | _"http/request/authz"_   |
+| `instance`           | `http://localhost:8181` | Address of OPA instance                                                        |                          |
+| `endpointsWhitelist` |                         | Comma-separated list of ant patterns to use for matching whitelisted endpoints | /ping,/info,/api-docs/** |
 
 ## Policy requirements
 

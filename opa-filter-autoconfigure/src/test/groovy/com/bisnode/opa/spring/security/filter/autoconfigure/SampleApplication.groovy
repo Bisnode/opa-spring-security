@@ -16,4 +16,7 @@ class SampleApplication {
     @GetMapping
     void controllerMethod() { }
 
+    @GetMapping('whitelisted')
+    void whitelistedEndpoint() { }
+
 }

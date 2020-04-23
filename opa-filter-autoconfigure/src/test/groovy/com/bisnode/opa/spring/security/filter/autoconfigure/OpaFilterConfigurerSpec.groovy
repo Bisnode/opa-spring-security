@@ -24,6 +24,8 @@ import static com.bisnode.opa.client.rest.ContentType.Values.APPLICATION_JSON
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.any
 import static com.github.tomakehurst.wiremock.client.WireMock.anyUrl
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 
 @SpringBootTest(
@@ -144,13 +146,25 @@ class OpaFilterConfigurerSpec extends Specification {
           e.response.status == 401
     }
 
+    def 'should not ask OPA for whitelisted path and authenticated user'() {
+        when:
+          def response = restClient.get(path: '/whitelisted', headers: ["Authorization": BASIC_AUTH_HEADER])
+
+        then:
+          noExceptionThrown()
+          response.status == 200
+          wireMockServer.verify(0, postRequestedFor(anyUrl())
+                  .withRequestBody(equalToJson('{"input":{"path": "/whitelisted"}}', true, true))
+          )
+    }
+
     @TestConfiguration
     @EnableWebSecurity
     static class TestConfig extends WebSecurityConfigurerAdapter {
 
         @Bean
         OpaFilterConfiguration opaFilterConfiguration() {
-            new OpaFilterConfiguration('some/policy', URI.create("http://localhost:$OPA_PORT"))
+            new OpaFilterConfiguration('some/policy', ['/whitelisted'], URI.create("http://localhost:$OPA_PORT"))
         }
 
         @Bean
