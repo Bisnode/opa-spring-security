@@ -78,3 +78,7 @@ When library denies access to the resource, `AuthorizationFailureEvent` is publi
 ## Developing and building
 Build process and dependency management is done using Gradle.
 Tests are written in Spock.
+
+## Contribution
+
+Interested in contributing? Please, start by reading [this document](https://github.com/Bisnode/opa-spring-security/blob/master/CONTRIBUTING.md).
