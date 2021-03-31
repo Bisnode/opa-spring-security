@@ -1,10 +1,6 @@
 package com.bisnode.opa.spring.security.filter.decision.request
 
 import org.springframework.mock.web.MockHttpServletRequest
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.context.SecurityContextImpl
-import org.springframework.security.oauth2.core.AbstractOAuth2Token
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -42,14 +38,9 @@ class DefaultOpaRequestSupplierSpec extends Specification {
     def 'should fill request with JWT when token is present'() {
         given:
             String token = 'some.token.withCrypto'
-            Authentication authentication = Stub() {
-                getCredentials() >> Stub(AbstractOAuth2Token) {
-                    getTokenValue() >> token
-                }
-            }
-            SecurityContextHolder.setContext(new SecurityContextImpl(authentication))
 
             HttpServletRequest httpServletRequest = new MockHttpServletRequest('GET', 'http://localhost:8080/test')
+            httpServletRequest.addHeader('Authorization', "Bearer $token")
 
         when:
             def input = defaultOpaRequestSupplier.get(httpServletRequest)
