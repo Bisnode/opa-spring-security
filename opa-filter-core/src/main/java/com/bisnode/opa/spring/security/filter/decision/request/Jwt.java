@@ -1,55 +1,34 @@
 package com.bisnode.opa.spring.security.filter.decision.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.AbstractOAuth2Token;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 import static java.util.function.Predicate.not;
 
 class Jwt {
-    private static final Logger log = LoggerFactory.getLogger(Jwt.class);
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String BEARER = "Bearer";
+
     private final String encoded;
 
     private Jwt(String encodedToken) {
         this.encoded = encodedToken;
     }
 
-    static Optional<Jwt> fromSecurityContext() {
-        return extractAccessToken(SecurityContextHolder.getContext().getAuthentication())
+    static Optional<Jwt> fromHttpRequest(HttpServletRequest httpRequest) {
+        return extractAccessToken(httpRequest)
                 .filter(not(String::isBlank))
                 .filter(Jwt::looksLikeJwt)
                 .map(Jwt::new);
     }
 
-    private static Optional<String> extractAccessToken(final Authentication authentication) {
-        if (isNull(authentication)) {
-            log.info("Received null authentication");
-            return Optional.empty();
-        }
-
-        // For Spring Security in Spring < 5
-        if (authentication.getDetails() instanceof OAuth2AuthenticationDetails) {
-            final String accessToken = ((OAuth2AuthenticationDetails) authentication.getDetails()).getTokenValue();
-            if (nonNull(accessToken) && !accessToken.isBlank()) {
-                return Optional.of(accessToken);
-            }
-        }
-
-        // For Spring Security in Spring >= 5
-        if (authentication.getCredentials() instanceof AbstractOAuth2Token) {
-            final String accessToken = ((AbstractOAuth2Token) authentication.getCredentials()).getTokenValue();
-            return Optional.ofNullable(accessToken).filter(not(String::isBlank));
-        }
-
-        log.info("Could not find access token in Authentication");
-        return Optional.empty();
+    private static Optional<String> extractAccessToken(HttpServletRequest httpRequest) {
+        return Optional.ofNullable(httpRequest)
+                .map(request -> request.getHeader(AUTHORIZATION))
+                .map(String::trim)
+                .filter(authorization -> authorization.toLowerCase().startsWith(BEARER.toLowerCase()))
+                .map(header -> header.substring(BEARER.length()))
+                .map(String::trim);
     }
 
     /**

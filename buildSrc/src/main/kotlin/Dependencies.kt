@@ -24,12 +24,6 @@ object SpringBoot {
 object SpringSecurity {
     const val config = "org.springframework.security:spring-security-config:${Versions.spring}"
     const val web = "org.springframework.security:spring-security-web:${Versions.spring}"
-
-    object OAuth2 {
-        const val core = "org.springframework.security:spring-security-oauth2-core:${Versions.spring}"
-        const val legacy = "org.springframework.security.oauth:spring-security-oauth2:${Versions.legacySecurity}"
-    }
-
 }
 
 

@@ -1,45 +1,38 @@
 package com.bisnode.opa.spring.security.filter.decision.request
 
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.context.SecurityContext
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.context.SecurityContextImpl
-import org.springframework.security.oauth2.core.AbstractOAuth2Token
-import spock.lang.Shared
+import org.springframework.mock.web.MockHttpServletRequest
 import spock.lang.Specification
 
 class JwtSpec extends Specification {
 
-    @Shared
-    SecurityContext contextWithMockOAuth2
-
-    def setupSpec() {
-        Authentication authentication = Stub() {
-            getCredentials() >> Stub(AbstractOAuth2Token) {
-                getTokenValue() >> 'some.token.withCrypto'
-            }
-        }
-
-        contextWithMockOAuth2 = new SecurityContextImpl(authentication)
-    }
-
-    def 'should get token on oAuth2 authentication'() {
+    def 'should get token from HTTP request with oAuth2 authentication header'() {
         given:
-            SecurityContextHolder.setContext(contextWithMockOAuth2)
+            def accessToken = 'some.token.withCrypto'
+            def httpRequest = new MockHttpServletRequest()
+            httpRequest.addHeader('Authorization', "Bearer $accessToken")
 
         when:
-            Optional<Jwt> jwt = Jwt.fromSecurityContext()
+            Optional<Jwt> jwt = Jwt.fromHttpRequest(httpRequest)
+            jwt.get().encoded == accessToken
 
         then:
             jwt.isPresent()
     }
 
-    def 'should return empty on no authentication'() {
+    def 'should return empty when HTTP request without oAuth2 authentication header'() {
         given:
-            SecurityContextHolder.setContext(new SecurityContextImpl(null))
+            def httpRequest = new MockHttpServletRequest()
 
         when:
-            Optional<Jwt> jwt = Jwt.fromSecurityContext()
+            Optional<Jwt> jwt = Jwt.fromHttpRequest(httpRequest)
+
+        then:
+            jwt.isEmpty()
+    }
+
+    def 'should return empty when HTTP request is null'() {
+        when:
+            Optional<Jwt> jwt = Jwt.fromHttpRequest(null)
 
         then:
             jwt.isEmpty()

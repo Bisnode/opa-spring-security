@@ -19,7 +19,7 @@ public class DefaultOpaRequestSupplier implements OpaRequestSupplier<OpaInput> {
         OpaInput.Builder inputBuilder = OpaInput.builder()
                 .method(request.getMethod())
                 .path(request.getServletPath());
-        Jwt.fromSecurityContext().map(Jwt::getEncoded).ifPresent(inputBuilder::encodedJwt);
+        Jwt.fromHttpRequest(request).map(Jwt::getEncoded).ifPresent(inputBuilder::encodedJwt);
         return inputBuilder.build();
     }
 }
