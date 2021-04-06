@@ -46,6 +46,23 @@ class OpaFilterSpec extends Specification {
           1 * eventPublisher.publishEvent(_ as AuthorizationFailureEvent)
     }
 
+    def 'should throw AccessDeniedException on disallow and not publish AuthorizationFailureEvent when security context without authentication'() {
+        given:
+          SecurityContextHolder.clearContext()
+          FilterChain filterChain = Mock()
+          HttpServletRequest httpServletRequest = Mock()
+          decider.decideFor(httpServletRequest) >> new AccessDecision(allow: false)
+          whitelistRequestMatcher.matches(_ as HttpServletRequest) >> false
+
+        when:
+          opaFilter.doFilter(httpServletRequest, null, filterChain)
+
+        then:
+          thrown AccessDeniedException
+          0 * filterChain.doFilter(_, _)
+          0 * eventPublisher.publishEvent(_ as AuthorizationFailureEvent)
+    }
+
     def 'should throw AccessDeniedException on undefined response'() {
         given:
             FilterChain filterChain = Mock()
