@@ -20,6 +20,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class OpaFilter extends GenericFilterBean {
 
@@ -109,9 +110,9 @@ public class OpaFilter extends GenericFilterBean {
         String rejectionMessage = String.format("Access request rejected by OPA because: %s", accessDecision.getReason());
         log.debug(rejectionMessage);
         AccessDeniedException accessDeniedException = new AccessDeniedException(rejectionMessage);
-        AuthorizationFailureEvent event = new AuthorizationFailureEvent(
-                this, List.of(), SecurityContextHolder.getContext().getAuthentication(), accessDeniedException);
-        eventPublisher.publishEvent(event);
+        Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+                .map(authentication -> new AuthorizationFailureEvent(OpaFilter.this, List.of(), authentication, accessDeniedException))
+                .ifPresent(eventPublisher::publishEvent);
         throw accessDeniedException;
     }
 
